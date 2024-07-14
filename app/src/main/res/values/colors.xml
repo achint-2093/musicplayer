@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="shimmer_color">#636868</color>
+    <color name="background">#ffffff</color>
+    <color name="toolbar_background">#ffffff</color>
+    <color name="status_bar_color">#ffffff</color>
+    <color name="text_color">#000000</color>
+    <color name="icon_color">#000000</color>
+    <color name="formula_category_icon_color">#FFFFFF</color>
+    <color name="text_color_light">#B0B0B0</color>
+    <color name="toolbar_title_color">#000000</color>
+    <color name="box_background">#f5f5f5</color>
+    <color name="button_color">#42a249</color>
+    <color name="button_text">#ffffff</color>
+    <color name="button_disabled_color">#FFCCCCCC</color>
+    <color name="text_highlight_color">#8042A249</color>
+    <color name="text_handler_color">#CC42A249</color>
+    <color name="rating_bar_color">#FFC107</color>
+</resources>

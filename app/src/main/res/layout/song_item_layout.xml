@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="song"
+            type="com.techuntried.musicplayer.data.models.SongModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/musicImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/musicName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:maxLines="1"
+            android:text="@{song.songName}"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/musicArtistName"
+            app:layout_constraintEnd_toStartOf="@+id/moreButton"
+            app:layout_constraintStart_toEndOf="@id/musicImage"
+            app:layout_constraintTop_toTopOf="@+id/musicImage"
+            tools:text="Music name" />
+
+        <TextView
+            android:id="@+id/musicArtistName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/text_color_light"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/musicImage"
+            app:layout_constraintEnd_toEndOf="@+id/musicName"
+            app:layout_constraintStart_toStartOf="@+id/musicName"
+            app:layout_constraintTop_toBottomOf="@+id/musicName"
+            android:text="artist"
+            tools:text="Artist" />
+
+        <ImageView
+            android:id="@+id/moreButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:src="@drawable/more_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

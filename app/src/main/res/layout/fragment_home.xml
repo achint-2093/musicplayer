@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        tools:context=".ui.FragmentHome">
+
+        <GridLayout
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:id="@+id/songs"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_corners_shape"
+                android:backgroundTint="@color/box_background"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/songs"
+                    android:textColor="@color/text_color"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playlists"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill_horizontal"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_corners_shape"
+                android:backgroundTint="@color/box_background"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/playlists"
+                    android:textColor="@color/text_color"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </GridLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

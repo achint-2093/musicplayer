@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/editButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+
+        <TextView
+            android:id="@+id/optionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/optionImage"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_title"
+            tools:text="option Title" />
+
+        <ImageView
+            android:id="@+id/optionImage"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:padding="4dp"
+            android:src="@drawable/add_icon" />
+
+    </RelativeLayout>
+</layout>
