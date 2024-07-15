@@ -10,5 +10,9 @@ data class SongEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     @ColumnInfo("songName")
-    val songName: String
+    val songName: String,
+    @ColumnInfo("artist")
+    val artist: String,
+    @ColumnInfo("uri")
+    val uri: String
 )

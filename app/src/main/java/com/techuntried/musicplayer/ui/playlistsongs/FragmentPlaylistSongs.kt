@@ -115,7 +115,7 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
 
     private fun setSongsAdapter() {
         adapter = SongsAdapter(object : SongsClickListener {
-            override fun onClick() {
+            override fun onClick(songEntity: SongEntity) {
                 TODO("Not yet implemented")
             }
 

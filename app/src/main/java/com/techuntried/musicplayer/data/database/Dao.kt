@@ -24,6 +24,9 @@ interface SongsDao {
     @Query("SELECT * FROM songs")
     fun getSongs(): Flow<List<SongEntity>>
 
+    @Query("SELECT * FROM songs WHERE id=:songId")
+    fun getSongById(songId: Long): SongEntity
+
 }
 
 @Dao
@@ -53,7 +56,7 @@ interface PlaylistSongsDao {
     suspend fun insert(playlistSongsRef: PlaylistSongsRef)
 
     @Query("SELECT * FROM songs INNER JOIN playlistsongsref ON songs.id = playlistsongsref.songId WHERE playlistsongsref.playlistId = :playlistId")
-    suspend fun getSongsForPlaylist(playlistId: Long): List<SongEntity>
+    fun getSongsForPlaylist(playlistId: Long): Flow<List<SongEntity>>
 
     @Query("SELECT * FROM playlists INNER JOIN playlistsongsref ON playlists.id = playlistsongsref.playlistId WHERE playlistsongsref.songId = :songId")
     suspend fun getPlaylistsForSong(songId: Int): List<PlaylistEntity>

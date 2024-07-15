@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentSongsBinding
@@ -91,8 +92,12 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     private fun setSongsAdapter() {
         adapter = SongsAdapter(object : SongsClickListener {
 
-            override fun onClick() {
-
+            override fun onClick(songEntity: SongEntity) {
+                val action =
+                    FragmentSongDirections.actionFragmentSongToFragmentPlayer(
+                        songId = songEntity.id
+                    )
+                findNavController().navigate(action)
             }
 
             override fun onMoreClick(songEntity: SongEntity) {
@@ -119,7 +124,5 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     override fun onSongOptionSheetDismissed(selectedOption: SongOptions?) {
         TODO("Not yet implemented")
     }
-
-
 
 }

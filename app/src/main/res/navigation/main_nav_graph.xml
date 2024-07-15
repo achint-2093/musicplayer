@@ -21,7 +21,11 @@
         android:id="@+id/fragmentSong"
         android:name="com.techuntried.musicplayer.ui.songs.FragmentSong"
         android:label="FragmentSong"
-        tools:layout="@layout/fragment_songs" />
+        tools:layout="@layout/fragment_songs" >
+        <action
+            android:id="@+id/action_fragmentSong_to_fragmentPlayer"
+            app:destination="@id/fragmentPlayer" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentPlaylists"
         android:name="com.techuntried.musicplayer.ui.playlists.FragmentPlaylists"
@@ -53,6 +57,15 @@
         tools:layout="@layout/fragment_song_picker">
         <argument
             android:name="playlistId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentPlayer"
+        android:name="com.techuntried.musicplayer.ui.player.FragmentPlayer"
+        android:label="FragmentPlayer"
+        tools:layout="@layout/fragment_player" >
+        <argument
+            android:name="songId"
             app:argType="long" />
     </fragment>
 </navigation>

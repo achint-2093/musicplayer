@@ -1,4 +1,4 @@
-package com.techuntried.musicplayer.ui.playlistsongs
+package com.techuntried.musicplayer.ui.player
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,28 +13,29 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlaylistSongViewModel @Inject constructor(
+class PlayerViewmodel @Inject constructor(
     private val roomRepository: RoomRepository,
     private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) :
+    ViewModel() {
 
-    private val _playlistSongs = MutableStateFlow<Response<List<SongEntity>>>(Response.Loading())
-    val playlistSongs: StateFlow<Response<List<SongEntity>>>
-        get() = _playlistSongs
-    private var playlistId = savedStateHandle.get<Long>("playlistId")
+    private val songId = savedStateHandle.get<Long>("songId")
+
+    private val _song = MutableStateFlow<Response<SongEntity>>(Response.Loading())
+    val song: StateFlow<Response<SongEntity>>
+        get() = _song
 
     init {
-        getPlaylistSongs(playlistId = playlistId)
+        fetchSong(songId)
     }
 
-    private fun getPlaylistSongs(playlistId: Long?) {
+    private fun fetchSong(songId: Long?) {
         viewModelScope.launch {
-            if (playlistId != null) {
-                roomRepository.getPlaylistSongs(playlistId = playlistId).collect {
-                    _playlistSongs.value = Response.Success(it)
-                }
+            if (songId != null) {
+                val song = roomRepository.getSong(songId)
+                _song.value = Response.Success(song)
             }
         }
     }
-
 }
+

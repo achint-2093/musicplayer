@@ -31,3 +31,11 @@ fun PlaylistType.title(): String {
         PlaylistType.Update -> "Update Playlist"
     }
 }
+
+fun Long.formatDuration(): String {
+    val durationMillis=this
+    val hours = durationMillis / 3600000
+    val minutes = (durationMillis % 3600000) / 60000
+    val seconds = (durationMillis % 60000) / 1000
+    return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+}

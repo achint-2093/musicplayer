@@ -30,9 +30,8 @@ class SongsAdapter(
             clickListener: SongsClickListener
         ) {
             binding.song = item
-
             binding.root.setOnClickListener {
-                clickListener.onClick()
+                clickListener.onClick(item)
             }
 
             binding.moreButton.setOnClickListener {
@@ -54,7 +53,7 @@ class SongsAdapter(
 }
 
 interface SongsClickListener {
-    fun onClick()
+    fun onClick(songEntity: SongEntity)
     fun onMoreClick(songEntity: SongEntity)
 }
 

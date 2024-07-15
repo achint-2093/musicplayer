@@ -24,6 +24,11 @@ class RoomRepository @Inject constructor(
         return songsDao.getSongs().flowOn(Dispatchers.IO)
     }
 
+    suspend fun getSong(songId: Long): SongEntity {
+        return withContext(Dispatchers.IO) {
+            songsDao.getSongById(songId)
+        }
+    }
 
     suspend fun insertPlaylist(playlistEntity: PlaylistEntity) {
         withContext(Dispatchers.IO) {
@@ -38,7 +43,7 @@ class RoomRepository @Inject constructor(
     }
 
     fun getPlaylists(searchQuery: String): Flow<List<PlaylistEntity>> {
-        return playlistsDao.getPlaylistFlow(searchQuery)
+        return playlistsDao.getPlaylistFlow(searchQuery).flowOn(Dispatchers.IO)
     }
 
     suspend fun deletePlaylist(playlistEntity: PlaylistEntity) {
@@ -47,10 +52,8 @@ class RoomRepository @Inject constructor(
         }
     }
 
-    suspend fun getPlaylistSongs(playlistId: Long): List<SongEntity> {
-        return withContext(Dispatchers.IO) {
-            playlistSongsDao.getSongsForPlaylist(playlistId)
-        }
+    fun getPlaylistSongs(playlistId: Long): Flow<List<SongEntity>> {
+        return playlistSongsDao.getSongsForPlaylist(playlistId).flowOn(Dispatchers.IO)
     }
 
     suspend fun insertSongToPlaylist(playlistId: Long, songId: Long) {
@@ -58,9 +61,11 @@ class RoomRepository @Inject constructor(
             playlistSongsDao.insert(PlaylistSongsRef(playlistId, songId))
         }
     }
+
     suspend fun deleteSongFromPlaylist(playlistId: Long, songId: Long) {
         withContext(Dispatchers.IO) {
             playlistSongsDao.delete(PlaylistSongsRef(playlistId, songId))
         }
     }
+
 }
