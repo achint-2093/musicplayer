@@ -28,12 +28,14 @@ class DatabaseModule {
     ): MyAppDatabase {
 
         return Room.databaseBuilder(context, MyAppDatabase::class.java, "myAppDb")
-            .fallbackToDestructiveMigration()
             .build()
     }
 
     @Provides
     fun provideSongDao(db: MyAppDatabase) = db.songDao()
+
+    @Provides
+    fun providePlaylistsDao(db: MyAppDatabase) = db.playlistsDao()
 
     @Singleton
     @Provides

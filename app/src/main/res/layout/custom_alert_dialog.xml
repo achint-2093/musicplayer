@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/box_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/closeAlertDialog"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="end"
+        android:padding="4dp"
+        android:src="@drawable/close_icon" />
+
+    <TextView
+        android:id="@+id/alert_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_head"
+        tools:text="Title" />
+
+    <TextView
+        android:id="@+id/alert_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_normal"
+        tools:text="Description" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/alert_button"
+        style="@style/CustomButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_margin="8dp"
+        tools:text="Button" />
+
+</LinearLayout>

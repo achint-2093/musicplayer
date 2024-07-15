@@ -16,3 +16,14 @@ fun showSnackBar(view: View, message: String) {
     snackBar.setTextColor(view.resources.getColor(R.color.text_color, null))
     snackBar.show()
 }
+
+enum class PlaylistType {
+    Add, Update
+}
+
+fun PlaylistType.title(): String {
+    return when (this) {
+        PlaylistType.Add -> "Add to Playlist"
+        PlaylistType.Update -> "Update Playlist"
+    }
+}

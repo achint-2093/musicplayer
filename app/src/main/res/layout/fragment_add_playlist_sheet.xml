@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp"
+        tools:background="@color/box_background"
+        tools:context=".ui.bottomsheets.AddPlaylistSheet">
+
+        <View
+            android:id="@+id/lineView"
+            android:layout_width="32dp"
+            android:layout_height="3.5dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/round_corners_shape"
+            android:backgroundTint="@color/icon_color" />
+
+
+        <TextView
+            android:id="@+id/bookmarkText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_head"
+            tools:text="Add to Bookmarks" />
+
+        <TextView
+            android:id="@+id/ChapterNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_title"
+            tools:text="chaptername" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="add_a_note_optional"
+            android:textColor="@color/text_color_light"
+            android:textSize="@dimen/text_normal" />
+
+
+        <EditText
+            android:id="@+id/notes"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/round_corners_shape"
+            android:backgroundTint="@color/background"
+            android:gravity="center_vertical"
+            android:hint="notes"
+            android:inputType="textMultiLine"
+            android:maxLength="100"
+            android:minLines="1"
+            android:padding="10dp"
+            android:textColor="@color/text_color"
+            android:textColorHint="@color/text_color_light"
+            android:textSize="@dimen/text_subtitle"
+            android:theme="@style/TextSelectHandlers" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/ContinueButton"
+            style="@style/CustomButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/submit" />
+
+    </LinearLayout>
+</layout>

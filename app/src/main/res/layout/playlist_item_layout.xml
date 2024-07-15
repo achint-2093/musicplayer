@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="playList"
+            type="com.techuntried.musicplayer.data.models.PlaylistEntity" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/playlistImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="4dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/playListName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@{playList.playListName}"
+            android:textColor="@color/text_color"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/playlistSongsCount"
+            app:layout_constraintEnd_toStartOf="@+id/moreButton"
+            app:layout_constraintStart_toEndOf="@id/playlistImage"
+            app:layout_constraintTop_toTopOf="@+id/playlistImage"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Music name" />
+
+        <TextView
+            android:id="@+id/playlistSongsCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_light"
+            app:layout_constraintBottom_toBottomOf="@+id/playlistImage"
+            app:layout_constraintEnd_toEndOf="@+id/playListName"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/playListName"
+            app:layout_constraintTop_toBottomOf="@+id/playListName"
+            tools:text="2 song" />
+
+
+        <ImageView
+            android:id="@+id/moreButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            android:src="@drawable/more_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

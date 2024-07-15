@@ -28,7 +28,7 @@ class FragmentHome : Fragment() {
         }
 
         binding.playlists.setOnClickListener {
-
+            findNavController().navigate(R.id.action_fragmentHome_to_fragmentPlaylists)
         }
 
 

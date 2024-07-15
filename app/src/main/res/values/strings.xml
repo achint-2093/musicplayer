@@ -2,4 +2,6 @@
     <string name="app_name">Music Player</string>
     <string name="songs">Songs</string>
     <string name="playlists">Playlists</string>
+    <string name="search_playlist">Search Playlist</string>
+    <string name="submit">Submit</string>
 </resources>

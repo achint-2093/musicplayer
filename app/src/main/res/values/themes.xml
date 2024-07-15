@@ -7,6 +7,10 @@
 
     <style name="Theme.MusicPlayer" parent="Base.Theme.MusicPlayer" />
 
+    <style name="RoundedCornerAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/round_corners_shape</item>
+    </style>
+
     <!-- toolbar style -->
     <style name="MyToolbarStyle" parent="ThemeOverlay.Material3.Light">
         <item name="android:textColorPrimary">@color/text_color</item>
@@ -19,4 +23,19 @@
         <item name="android:textSize">@dimen/text_title</item>
     </style>
     <!-- toolbar style -->
+
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:textSize">@dimen/button_text</item>
+<!--        <item name="android:fontFamily">@font/rubik_medium</item>-->
+        <item name="android:background">@drawable/round_corners_shape</item>
+        <item name="android:backgroundTint">@color/button_color</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/button_text</item>
+    </style>
+
+    <style name="TextSelectHandlers">
+        <item name="colorControlActivated">@color/text_handler_color</item>
+        <item name="android:textColorHighlight">@color/text_highlight_color</item>
+    </style>
 </resources>

@@ -13,10 +13,18 @@
         <action
             android:id="@+id/action_fragmentHome_to_fragmentSong"
             app:destination="@id/fragmentSong" />
+        <action
+            android:id="@+id/action_fragmentHome_to_fragmentPlaylists"
+            app:destination="@id/fragmentPlaylists" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSong"
         android:name="com.techuntried.musicplayer.ui.songs.FragmentSong"
         android:label="FragmentSong"
         tools:layout="@layout/fragment_songs"/>
+    <fragment
+        android:id="@+id/fragmentPlaylists"
+        android:name="com.techuntried.musicplayer.ui.playlists.FragmentPlaylists"
+        android:label="FragmentPlaylists"
+        tools:layout="@layout/fragment_playlists"/>
 </navigation>
