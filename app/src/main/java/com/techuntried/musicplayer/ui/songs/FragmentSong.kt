@@ -10,22 +10,24 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.techuntried.musicplayer.data.models.SongModel
+import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentSongsBinding
+import com.techuntried.musicplayer.ui.bottomsheets.SongOptionsSheet
 import com.techuntried.musicplayer.utils.Response
+import com.techuntried.musicplayer.utils.SongOptions
 import com.techuntried.musicplayer.utils.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FragmentSong : Fragment() {
+class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
 
     private var _binding: FragmentSongsBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SongViewModel by viewModels()
     private lateinit var adapter: SongsAdapter
-    //private lateinit var songSheetCallback: SongOptionsSheet.BottomSheetCallback
+    private lateinit var songSheetCallback: SongOptionsSheet.BottomSheetCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +95,7 @@ class FragmentSong : Fragment() {
 
             }
 
-            override fun onMoreClick(songModel: SongModel) {
+            override fun onMoreClick(songEntity: SongEntity) {
 //                val songsBottomSheet = SongOptionsSheet.newInstance(
 //                    song, PlaylistsEntity(
 //                        -1000, "all"
@@ -114,8 +116,10 @@ class FragmentSong : Fragment() {
         _binding = null
     }
 
-//    override fun onDataDismissed(selectedOption: Int, song: SongEntity) {
-//
-//    }
+    override fun onSongOptionSheetDismissed(selectedOption: SongOptions?) {
+        TODO("Not yet implemented")
+    }
+
+
 
 }

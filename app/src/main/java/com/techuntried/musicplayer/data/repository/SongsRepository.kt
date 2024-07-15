@@ -5,7 +5,6 @@ import android.content.Context
 import android.provider.MediaStore
 import com.techuntried.musicplayer.data.database.SongsDao
 import com.techuntried.musicplayer.data.models.SongEntity
-import com.techuntried.musicplayer.data.models.SongModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,7 +19,7 @@ class SongsRepository @Inject constructor(
 
     suspend fun fetchMusicFiles() {
         return withContext(Dispatchers.IO) {
-            val songs = mutableListOf<SongModel>()
+            val songs = mutableListOf<SongEntity>()
             val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
             val projection = arrayOf(
                 MediaStore.Audio.Media._ID,
@@ -49,13 +48,12 @@ class SongsRepository @Inject constructor(
                  val duration = c.getLong(durationColumn)
                  val data = c.getString(dataColumn)*/
                     val selectedAudioUri = ContentUris.withAppendedId(uri, id).toString()
-                    val song = SongModel(id, title)
+                    val song = SongEntity(id, title)
                     songs.add(song)
                 }
             }
 
-            val songsList = songs.map { SongEntity(it.songId,it.songName) }
-            songsDao.insertSongs(songsList)
+            songsDao.insertSongs(songs)
         }
     }
 }

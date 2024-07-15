@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.PlaylistEntity
@@ -67,8 +68,9 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
 
                     true
                 }
+
                 R.id.add_playlists_action -> {
-                    val playlistSheet = AddPlaylistSheet.newInstance("",PlaylistType.Add)
+                    val playlistSheet = AddPlaylistSheet.newInstance("", PlaylistType.Add)
                     playlistSheet.setBottomSheetCallback(playlistSheetCallback)
                     playlistSheet.show(parentFragmentManager, "AddPlaylistSheet")
                     //  findNavController().navigate(R.id.action_fragmentHome_to_fragmentFavorites)
@@ -119,7 +121,11 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
     private fun setPlaylistAdapter() {
         adapter = PlaylistsAdapter(object : PlaylistClickListener {
             override fun onClick(playlist: PlaylistEntity) {
-                TODO("Not yet implemented")
+                val action =
+                    FragmentPlaylistsDirections.actionFragmentPlaylistsToFragmentPlaylistSongs(
+                        playlist.id, playlist.playListName
+                    )
+                findNavController().navigate(action)
             }
 
             override fun onMoreClick(playlist: PlaylistEntity) {

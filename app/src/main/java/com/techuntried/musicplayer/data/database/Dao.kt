@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.techuntried.musicplayer.data.models.PlaylistEntity
+import com.techuntried.musicplayer.data.models.PlaylistSongsRef
 import com.techuntried.musicplayer.data.models.SongEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -24,6 +25,7 @@ interface SongsDao {
     fun getSongs(): Flow<List<SongEntity>>
 
 }
+
 @Dao
 interface PlaylistsDao {
 
@@ -45,3 +47,17 @@ interface PlaylistsDao {
 
 }
 
+@Dao
+interface PlaylistSongsDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(playlistSongsRef: PlaylistSongsRef)
+
+    @Query("SELECT * FROM songs INNER JOIN playlistsongsref ON songs.id = playlistsongsref.songId WHERE playlistsongsref.playlistId = :playlistId")
+    suspend fun getSongsForPlaylist(playlistId: Long): List<SongEntity>
+
+    @Query("SELECT * FROM playlists INNER JOIN playlistsongsref ON playlists.id = playlistsongsref.playlistId WHERE playlistsongsref.songId = :songId")
+    suspend fun getPlaylistsForSong(songId: Int): List<PlaylistEntity>
+
+    @Delete
+    suspend fun delete(playlistSongsRef: PlaylistSongsRef)
+}

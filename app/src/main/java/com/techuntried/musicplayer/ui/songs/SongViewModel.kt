@@ -2,7 +2,7 @@ package com.techuntried.musicplayer.ui.songs
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.techuntried.musicplayer.data.models.SongModel
+import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.data.repository.DataStoreRepository
 import com.techuntried.musicplayer.data.repository.RoomRepository
 import com.techuntried.musicplayer.data.repository.SongsRepository
@@ -21,8 +21,8 @@ class SongViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _songs = MutableStateFlow<Response<List<SongModel>>>(Response.Loading())
-    val songs: StateFlow<Response<List<SongModel>>>
+    private val _songs = MutableStateFlow<Response<List<SongEntity>>>(Response.Loading())
+    val songs: StateFlow<Response<List<SongEntity>>>
         get() = _songs
 
 

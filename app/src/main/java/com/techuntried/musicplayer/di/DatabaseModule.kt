@@ -37,6 +37,9 @@ class DatabaseModule {
     @Provides
     fun providePlaylistsDao(db: MyAppDatabase) = db.playlistsDao()
 
+    @Provides
+    fun providePlaylistSongsDao(db: MyAppDatabase) = db.playlistsSongsDao()
+
     @Singleton
     @Provides
     fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {

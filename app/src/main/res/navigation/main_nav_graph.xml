@@ -9,7 +9,7 @@
         android:id="@+id/fragmentHome"
         android:name="com.techuntried.musicplayer.ui.home.FragmentHome"
         android:label="FragmentHome"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_fragmentHome_to_fragmentSong"
             app:destination="@id/fragmentSong" />
@@ -21,10 +21,38 @@
         android:id="@+id/fragmentSong"
         android:name="com.techuntried.musicplayer.ui.songs.FragmentSong"
         android:label="FragmentSong"
-        tools:layout="@layout/fragment_songs"/>
+        tools:layout="@layout/fragment_songs" />
     <fragment
         android:id="@+id/fragmentPlaylists"
         android:name="com.techuntried.musicplayer.ui.playlists.FragmentPlaylists"
         android:label="FragmentPlaylists"
-        tools:layout="@layout/fragment_playlists"/>
+        tools:layout="@layout/fragment_playlists">
+        <action
+            android:id="@+id/action_fragmentPlaylists_to_fragmentPlaylistSongs"
+            app:destination="@id/fragmentPlaylistSongs" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentPlaylistSongs"
+        android:name="com.techuntried.musicplayer.ui.playlistsongs.FragmentPlaylistSongs"
+        android:label="FragmentPlaylistSongs"
+        tools:layout="@layout/fragment_playlist_songs">
+        <argument
+            android:name="playlistId"
+            app:argType="long" />
+        <argument
+            android:name="playlistName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fragmentPlaylistSongs_to_fragmentSongPicker"
+            app:destination="@id/fragmentSongPicker" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSongPicker"
+        android:name="com.techuntried.musicplayer.ui.songPicker.FragmentSongPicker"
+        android:label="FragmentSongPicker"
+        tools:layout="@layout/fragment_song_picker">
+        <argument
+            android:name="playlistId"
+            app:argType="long" />
+    </fragment>
 </navigation>

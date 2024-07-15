@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.techuntried.musicplayer.data.models.SongModel
+import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.SongItemLayoutBinding
 
 class SongsAdapter(
     private val clickListener: SongsClickListener
 ) :
-    ListAdapter<SongModel, SongsAdapter.MyViewHolder>(SongsDiffUtilCallBack()) {
+    ListAdapter<SongEntity, SongsAdapter.MyViewHolder>(SongsDiffUtilCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder.from(parent)
@@ -26,7 +26,7 @@ class SongsAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            item: SongModel,
+            item: SongEntity,
             clickListener: SongsClickListener
         ) {
             binding.song = item
@@ -55,20 +55,20 @@ class SongsAdapter(
 
 interface SongsClickListener {
     fun onClick()
-    fun onMoreClick(songModel: SongModel)
+    fun onMoreClick(songEntity: SongEntity)
 }
 
-class SongsDiffUtilCallBack : DiffUtil.ItemCallback<SongModel>() {
+class SongsDiffUtilCallBack : DiffUtil.ItemCallback<SongEntity>() {
     override fun areItemsTheSame(
-        oldItem: SongModel,
-        newItem: SongModel
+        oldItem: SongEntity,
+        newItem: SongEntity
     ): Boolean {
-        return oldItem.songId == newItem.songId
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: SongModel,
-        newItem: SongModel
+        oldItem: SongEntity,
+        newItem: SongEntity
     ): Boolean {
         return oldItem == newItem
     }

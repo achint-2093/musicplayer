@@ -33,7 +33,13 @@
 
 
         <include
-            android:id="@+id/DeletePdf"
+            android:id="@+id/share_song"
+            layout="@layout/song_option_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/delete_song"
             layout="@layout/song_option_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

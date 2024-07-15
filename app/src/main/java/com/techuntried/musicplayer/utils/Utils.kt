@@ -21,6 +21,10 @@ enum class PlaylistType {
     Add, Update
 }
 
+enum class SongOptions {
+    Share, Delete
+}
+
 fun PlaylistType.title(): String {
     return when (this) {
         PlaylistType.Add -> "Add to Playlist"

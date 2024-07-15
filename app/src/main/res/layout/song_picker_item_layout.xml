@@ -7,7 +7,8 @@
 
         <variable
             name="song"
-            type="com.techuntried.musicplayer.data.models.SongEntity" />
+            type="com.techuntried.musicplayer.data.models.SongPickerModel" />
+
 
     </data>
 
@@ -32,12 +33,12 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:maxLines="1"
-            android:text="@{song.songName}"
             android:textColor="@color/text_color"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:text="@{song.name}"
             app:layout_constraintBottom_toTopOf="@+id/musicArtistName"
-            app:layout_constraintEnd_toStartOf="@+id/moreButton"
+            app:layout_constraintEnd_toStartOf="@+id/addButton"
             app:layout_constraintStart_toEndOf="@id/musicImage"
             app:layout_constraintTop_toTopOf="@+id/musicImage"
             tools:text="Music name" />
@@ -53,16 +54,17 @@
             app:layout_constraintEnd_toEndOf="@+id/musicName"
             app:layout_constraintStart_toStartOf="@+id/musicName"
             app:layout_constraintTop_toBottomOf="@+id/musicName"
-            android:text="artist"
             tools:text="Artist" />
 
+
         <ImageView
-            android:id="@+id/moreButton"
+            android:id="@+id/addButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:padding="8dp"
-            android:src="@drawable/more_icon"
+            android:src="@drawable/add_icon"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
