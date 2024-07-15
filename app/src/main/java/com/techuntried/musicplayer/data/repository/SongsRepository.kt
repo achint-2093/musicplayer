@@ -3,6 +3,8 @@ package com.techuntried.musicplayer.data.repository
 import android.content.ContentUris
 import android.content.Context
 import android.provider.MediaStore
+import com.techuntried.musicplayer.data.database.SongsDao
+import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.data.models.SongModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -12,10 +14,11 @@ import javax.inject.Singleton
 
 @Singleton
 class SongsRepository @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val songsDao: SongsDao
 ) {
 
-    suspend fun fetchMusicFiles(): List<SongModel> {
+    suspend fun fetchMusicFiles() {
         return withContext(Dispatchers.IO) {
             val songs = mutableListOf<SongModel>()
             val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -51,7 +54,8 @@ class SongsRepository @Inject constructor(
                 }
             }
 
-            songs
+            val songsList = songs.map { SongEntity(it.songId,it.songName) }
+            songsDao.insertSongs(songsList)
         }
     }
 }
