@@ -19,165 +19,146 @@
             android:layout_height="0dp"
             android:layout_margin="16dp"
             android:src="@drawable/music_bg"
-            app:layout_constraintBottom_toTopOf="@id/playBackControls"
+            app:layout_constraintBottom_toTopOf="@id/MusicName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/playBackControls"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/MusicName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:freezesText="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@id/ArtistName"
+            app:layout_constraintEnd_toStartOf="@id/like_icon"
+            app:layout_constraintStart_toStartOf="@id/seekbar"
+            tools:text="Music Name" />
+
+        <TextView
+            android:id="@+id/ArtistName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/MusicName"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="20dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:freezesText="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/seekbar"
+            app:layout_constraintEnd_toStartOf="@id/like_icon"
+            app:layout_constraintStart_toStartOf="@id/seekbar"
+            tools:text="artist Name" />
+
+
+        <ImageView
+            android:id="@+id/like_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="8dp"
+            android:src="@drawable/favourite_icon"
+            app:layout_constraintBottom_toBottomOf="@id/ArtistName"
+            app:layout_constraintEnd_toEndOf="@id/seekbar"
+            app:layout_constraintTop_toTopOf="@id/MusicName" />
+
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/currentPosition"
+            app:layout_constraintEnd_toEndOf="@id/duration"
+            app:layout_constraintStart_toStartOf="@id/currentPosition" />
+
+        <TextView
+            android:id="@+id/currentPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="32dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:layout_constraintBottom_toTopOf="@id/playButton"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="0:00" />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/currentPosition"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/currentPosition"
+            tools:text="1:00" />
+
+
+        <ImageView
+            android:id="@+id/playButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="50dp"
+            android:src="@drawable/play_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/skipNext"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/skip_next"
+            app:layout_constraintBottom_toBottomOf="@id/playButton"
+            app:layout_constraintStart_toEndOf="@+id/playButton"
+            app:layout_constraintTop_toTopOf="@id/playButton" />
+
+        <ImageView
+            android:id="@+id/skipPrevious"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/skip_previous"
+            app:layout_constraintBottom_toBottomOf="@id/playButton"
+            app:layout_constraintEnd_toStartOf="@+id/playButton"
+            app:layout_constraintTop_toTopOf="@id/playButton" />
 
 
-            <SeekBar
-                android:id="@+id/seekbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="40dp"
-                app:layout_constraintBottom_toTopOf="@id/playButton"
-                app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/shuffle_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:padding="8dp"
+            android:src="@drawable/shuffle"
+            app:layout_constraintBottom_toBottomOf="@id/playButton"
+            app:layout_constraintEnd_toStartOf="@+id/skipPrevious"
+            app:layout_constraintTop_toTopOf="@id/playButton" />
 
-            <RelativeLayout
-                android:layout_marginTop="20dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintBottom_toTopOf="@+id/seekbar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:id="@+id/MusicName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:layout_toStartOf="@+id/like_icon"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:freezesText="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:textSize="24sp"
-                    tools:text="Music Name" />
-
-                <TextView
-                    android:id="@+id/ArtistName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/MusicName"
-                    android:layout_marginEnd="24dp"
-                    android:layout_toStartOf="@+id/like_icon"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:freezesText="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:textSize="18sp"
-                    tools:text="artist Name" />
-
-
-                <ImageView
-                    android:id="@+id/like_icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:padding="8dp"
-                    android:src="@drawable/favourite_icon" />
-
-            </RelativeLayout>
-
-
-            <TextView
-                android:id="@+id/currentPosition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                app:layout_constraintStart_toStartOf="@+id/seekbar"
-                app:layout_constraintTop_toBottomOf="@id/seekbar"
-                tools:text="0:00" />
-
-            <TextView
-                android:id="@+id/duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/seekbar"
-                app:layout_constraintTop_toBottomOf="@id/seekbar"
-                tools:text="1:00" />
-
-
-            <ImageView
-                android:id="@+id/playButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginBottom="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/play_icon" />
-
-            <ImageView
-                android:id="@+id/skipNext"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="50dp"
-                android:src="@drawable/skip_next"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/playButton" />
-
-            <ImageView
-                android:id="@+id/skipPrevious"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="50dp"
-                android:src="@drawable/skip_previous"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/playButton" />
-
-
-            <ImageView
-                android:id="@+id/shuffle_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="50dp"
-                android:padding="8dp"
-                android:src="@drawable/shuffle"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/skipPrevious" />
-
-            <ImageView
-                android:id="@+id/repeat_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="50dp"
-                android:padding="8dp"
-                android:src="@drawable/repeat_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/skipNext" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/repeat_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:padding="8dp"
+            android:src="@drawable/repeat_icon"
+            app:layout_constraintBottom_toBottomOf="@id/playButton"
+            app:layout_constraintStart_toEndOf="@+id/skipNext"
+            app:layout_constraintTop_toTopOf="@id/playButton" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
