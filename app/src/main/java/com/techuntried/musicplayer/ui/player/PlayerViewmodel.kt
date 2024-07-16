@@ -8,6 +8,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
@@ -18,6 +19,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.data.repository.RoomRepository
+import com.techuntried.musicplayer.utils.Constants
 import com.techuntried.musicplayer.utils.PlayerService
 import com.techuntried.musicplayer.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,20 +34,30 @@ class PlayerViewmodel @Inject constructor(
 ) : ViewModel() {
 
     private val songId = savedStateHandle.get<Long>("songId")
+    private val playlistId = savedStateHandle.get<Long>("playlistId")
 
-    private val _song = MutableStateFlow<Response<SongEntity>>(Response.Loading())
-    val song: StateFlow<Response<SongEntity>>
-        get() = _song
+    private val _currentSong = MutableStateFlow<Response<SongEntity>>(Response.Loading())
+    val currentSong: StateFlow<Response<SongEntity>>
+        get() = _currentSong
 
-    private val _currentPosition = MutableStateFlow<Long>(0L)
+    private val _currentSongIndex = MutableStateFlow<Int>(0)
+    val currentSongIndex: StateFlow<Int>
+        get() = _currentSongIndex
+
+    private val _playlist = MutableStateFlow<List<SongEntity>>(emptyList())
+    val playlist: StateFlow<List<SongEntity>>
+        get() = _playlist
+
+
+    private val _currentPosition = MutableStateFlow(0L)
     val currentPosition: StateFlow<Long>
         get() = _currentPosition
 
-    private val _duration = MutableStateFlow<Long>(0L)
+    private val _duration = MutableStateFlow(0L)
     val duration: StateFlow<Long>
         get() = _duration
 
-    private val _shouldShowPlayButton = MutableStateFlow<Boolean>(true)
+    private val _shouldShowPlayButton = MutableStateFlow(true)
     val shouldShowPlayButton: StateFlow<Boolean>
         get() = _shouldShowPlayButton
 
@@ -53,16 +65,26 @@ class PlayerViewmodel @Inject constructor(
     private lateinit var controller: MediaController
     private val handler = Handler(Looper.getMainLooper())
 
-    init {
-        fetchSong(songId)
-    }
 
-    private fun fetchSong(songId: Long?) {
+    private fun fetchSongs(songId: Long?, playlistId: Long?) {
         viewModelScope.launch {
-            if (songId != null) {
-                val song = roomRepository.getSong(songId)
-                _song.value = Response.Success(song)
+            if (songId != null && playlistId != null) {
+                if (playlistId == Constants.PLAYLIST_ID_ALL) {
+                    val songs = roomRepository.getAllSongs()
+                    _playlist.value = songs
+                    val song = songs.find { it.id == songId }
+                    val songIndex = songs.indexOf(song)
+                    _currentSongIndex.value = songIndex
+                    //_currentSong.value = Response.Success(song)
+                } else {
+                    val songs = roomRepository.getPlaylistSongs(playlistId)
+                    _playlist.value = songs
+                    val song = songs.find { it.id == songId }
+                    val songIndex = songs.indexOf(song)
+                    _currentSongIndex.value = songIndex
+                }
             }
+            setMediaItems()
         }
     }
 
@@ -71,8 +93,8 @@ class PlayerViewmodel @Inject constructor(
         controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
         controllerFuture.addListener({
             controller = controllerFuture.get()
-            fetchSong(songId)
-            setMediaItem(song.value.data!!)
+            controller.playWhenReady = false
+            fetchSongs(songId, playlistId)
             setUi()
             listeners()
         }, MoreExecutors.directExecutor())
@@ -92,24 +114,52 @@ class PlayerViewmodel @Inject constructor(
                     )
                 ) {
                     _shouldShowPlayButton.value = Util.shouldShowPlayButton(player)
-                    _duration.value = player.duration
+//                    if (player.currentMediaItem != null)
+//                        if (player.duration != C.TIME_UNSET)
+//                            _duration.value = player.duration
+                    if (player.currentMediaItem != null && player.duration != C.TIME_UNSET) {
+                        _duration.value = player.duration
+                    }
                 }
             }
+
+
             override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
             }
 
         })
     }
 
-    private fun setMediaItem(songEntity: SongEntity) {
-        val mediaMetadata =
-            MediaMetadata.Builder().setTitle(songEntity.songName).setArtist(songEntity.artist)
-                .setArtworkUri(songEntity.uri.toUri()).build()
-        val mediaItem =
-            MediaItem.Builder().setMediaMetadata(mediaMetadata).setMediaId(songEntity.id.toString())
-                .setUri(songEntity.uri).build()
+    fun previousMediaItem() {
+        if (currentSongIndex.value > 0) {
+            _currentSongIndex.value=currentSongIndex.value-1
+            controller.seekTo(currentSongIndex.value, 0)
+            _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
+        }
 
-        controller.setMediaItem(mediaItem)
+    }
+
+    fun nextMediaItem() {
+        if (currentSongIndex.value < playlist.value.size - 1) {
+            _currentSongIndex.value=currentSongIndex.value+1
+            controller.seekTo(currentSongIndex.value, 0)
+            _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
+        }
+    }
+
+    private fun setMediaItems() {
+        for (song in playlist.value) {
+            val mediaMetadata =
+                MediaMetadata.Builder().setTitle(song.songName).setArtist(song.artist)
+                    .setArtworkUri(song.uri.toUri()).build()
+            val mediaItem =
+                MediaItem.Builder().setMediaMetadata(mediaMetadata).setMediaId(song.id.toString())
+                    .setUri(song.uri).build()
+            controller.addMediaItem(mediaItem)
+
+        }
+        controller.seekTo(currentSongIndex.value, 0)
+        _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
     }
 
     private fun checkPlaybackPosition(delayMs: Long): Boolean = handler.postDelayed({

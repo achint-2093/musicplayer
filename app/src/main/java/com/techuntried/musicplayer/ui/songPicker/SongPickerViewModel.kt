@@ -9,7 +9,6 @@ import com.techuntried.musicplayer.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +31,7 @@ class SongPickerViewModel @Inject constructor(
 
     private fun getAllSongs() {
         viewModelScope.launch {
-            val allSongs = roomRepository.getAllSongs().collect{
+            val allSongs = roomRepository.getSongs().collect{
                 _songList.value =
                     Response.Success(it.map { SongPickerModel(it.id, it.songName) })
             }

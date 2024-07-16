@@ -67,5 +67,8 @@
         <argument
             android:name="songId"
             app:argType="long" />
+        <argument
+            android:name="playlistId"
+            app:argType="long" />
     </fragment>
 </navigation>

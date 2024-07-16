@@ -62,7 +62,7 @@ class SongsRepository @Inject constructor(
                  val duration = c.getLong(durationColumn)
                  val data = c.getString(dataColumn)*/
                     val selectedAudioUri = ContentUris.withAppendedId(uri, id).toString()
-                    val song = SongEntity(0, title, artist, selectedAudioUri)
+                    val song = SongEntity(id, title, artist, selectedAudioUri)
                     songs.add(song)
                 }
             }

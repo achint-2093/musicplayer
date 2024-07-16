@@ -20,8 +20,14 @@ class RoomRepository @Inject constructor(
     private val playlistSongsDao: PlaylistSongsDao
 ) {
 
-    fun getAllSongs(): Flow<List<SongEntity>> {
+    fun getSongs(): Flow<List<SongEntity>> {
         return songsDao.getSongs().flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getAllSongs(): List<SongEntity> {
+        return withContext(Dispatchers.IO) {
+            songsDao.getAllSongs()
+        }
     }
 
     suspend fun getSong(songId: Long): SongEntity {
@@ -52,8 +58,14 @@ class RoomRepository @Inject constructor(
         }
     }
 
-    fun getPlaylistSongs(playlistId: Long): Flow<List<SongEntity>> {
-        return playlistSongsDao.getSongsForPlaylist(playlistId).flowOn(Dispatchers.IO)
+    fun getPlaylistSongsFlow(playlistId: Long): Flow<List<SongEntity>> {
+        return playlistSongsDao.getSongsForPlaylistFlow(playlistId).flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getPlaylistSongs(playlistId: Long): List<SongEntity> {
+        return withContext(Dispatchers.IO) {
+            playlistSongsDao.getSongsForPlaylist(playlistId)
+        }
     }
 
     suspend fun insertSongToPlaylist(playlistId: Long, songId: Long) {

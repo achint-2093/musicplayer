@@ -48,7 +48,7 @@ class SongViewModel @Inject constructor(
                     songsRepository.updateSongs()
                     dataStoreRepository.saveFirstTime(false)
                 }
-                roomRepository.getAllSongs().collect {
+                roomRepository.getSongs().collect {
                     _songs.value = Response.Success(it)
                 }
             } catch (e: Exception) {

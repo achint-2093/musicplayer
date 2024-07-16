@@ -145,7 +145,7 @@ class FragmentPlayer : Fragment() {
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.song.collect { song ->
+                viewModel.currentSong.collect { song ->
                     when (song) {
                         is Response.Success -> {
                             val data = song.data
@@ -244,12 +244,12 @@ class FragmentPlayer : Fragment() {
 //                binding.playButton.setImageResource(R.drawable.pause_icon)
 //            }
         }
-//        binding.skipNext.setOnClickListener {
-//            viewModel.nextMediaItem()
-//        }
-//        binding.skipPrevious.setOnClickListener {
-//            viewModel.previousMediaItem()
-//        }
+        binding.skipNext.setOnClickListener {
+            viewModel.nextMediaItem()
+        }
+        binding.skipPrevious.setOnClickListener {
+            viewModel.previousMediaItem()
+        }
 //        binding.shuffleButton.setOnClickListener {
 //            viewModel.toggleShuffle()
 //            Toast.makeText(context, "shuffle", Toast.LENGTH_SHORT).show()

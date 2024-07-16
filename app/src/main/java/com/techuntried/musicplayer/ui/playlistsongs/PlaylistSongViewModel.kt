@@ -30,7 +30,7 @@ class PlaylistSongViewModel @Inject constructor(
     private fun getPlaylistSongs(playlistId: Long?) {
         viewModelScope.launch {
             if (playlistId != null) {
-                roomRepository.getPlaylistSongs(playlistId = playlistId).collect {
+                roomRepository.getPlaylistSongsFlow(playlistId = playlistId).collect {
                     _playlistSongs.value = Response.Success(it)
                 }
             }

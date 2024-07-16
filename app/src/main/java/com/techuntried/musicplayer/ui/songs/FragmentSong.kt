@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentSongsBinding
 import com.techuntried.musicplayer.ui.bottomsheets.SongOptionsSheet
+import com.techuntried.musicplayer.utils.Constants
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.SongOptions
 import com.techuntried.musicplayer.utils.showSnackBar
@@ -60,6 +61,7 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
             viewModel.refreshSongs()
         }
     }
+
     private fun setObservers() {
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -101,7 +103,7 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
             override fun onClick(songEntity: SongEntity) {
                 val action =
                     FragmentSongDirections.actionFragmentSongToFragmentPlayer(
-                        songId = songEntity.id
+                        songId = songEntity.id, playlistId = Constants.PLAYLIST_ID_ALL
                     )
                 findNavController().navigate(action)
             }

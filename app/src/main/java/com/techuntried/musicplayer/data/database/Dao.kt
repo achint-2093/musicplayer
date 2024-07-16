@@ -18,7 +18,7 @@ interface SongsDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertSong(songEntity: SongEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSongs(songs: List<SongEntity>)
 
     @Query("SELECT * FROM songs")
@@ -62,7 +62,10 @@ interface PlaylistSongsDao {
     suspend fun insert(playlistSongsRef: PlaylistSongsRef)
 
     @Query("SELECT * FROM songs INNER JOIN playlistsongsref ON songs.id = playlistsongsref.songId WHERE playlistsongsref.playlistId = :playlistId")
-    fun getSongsForPlaylist(playlistId: Long): Flow<List<SongEntity>>
+    fun getSongsForPlaylistFlow(playlistId: Long): Flow<List<SongEntity>>
+
+    @Query("SELECT * FROM songs INNER JOIN playlistsongsref ON songs.id = playlistsongsref.songId WHERE playlistsongsref.playlistId = :playlistId")
+    fun getSongsForPlaylist(playlistId: Long): List<SongEntity>
 
     @Query("SELECT * FROM playlists INNER JOIN playlistsongsref ON playlists.id = playlistsongsref.playlistId WHERE playlistsongsref.songId = :songId")
     suspend fun getPlaylistsForSong(songId: Int): List<PlaylistEntity>
