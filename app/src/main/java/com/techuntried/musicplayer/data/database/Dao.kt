@@ -24,8 +24,14 @@ interface SongsDao {
     @Query("SELECT * FROM songs")
     fun getSongs(): Flow<List<SongEntity>>
 
+    @Query("SELECT * FROM songs")
+    fun getAllSongs(): List<SongEntity>
+
     @Query("SELECT * FROM songs WHERE id=:songId")
     fun getSongById(songId: Long): SongEntity
+
+    @Delete
+    suspend fun deleteSongs(songEntity: List<SongEntity>)
 
 }
 

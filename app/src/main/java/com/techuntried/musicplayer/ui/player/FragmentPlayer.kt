@@ -1,30 +1,18 @@
 package com.techuntried.musicplayer.ui.player
 
-import android.content.ComponentName
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
-import androidx.media3.common.Player
-import androidx.media3.common.util.Util
-import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
 import androidx.navigation.fragment.navArgs
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
 import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentPlayerBinding
-import com.techuntried.musicplayer.utils.PlayerService
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.formatDuration
 import com.techuntried.musicplayer.utils.showSnackBar
@@ -37,6 +25,8 @@ class FragmentPlayer : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private val viewModel: PlayerViewmodel by viewModels()
+
+    //    private val handler = Handler(Looper.getMainLooper())
     private val args by navArgs<FragmentPlayerArgs>()
     private var songs: List<SongEntity>? = null
     private var currentSongIndex: Int? = null
@@ -44,8 +34,8 @@ class FragmentPlayer : Fragment() {
     private var playlistId: Long? = null
     private var shortPlayback: Boolean? = null
 
-    private lateinit var controllerFuture: ListenableFuture<MediaController>
-    private val controller: MediaController? get() = if (controllerFuture.isDone) controllerFuture.get() else null
+//    private lateinit var controllerFuture: ListenableFuture<MediaController>
+//    private lateinit var controller: MediaController
 
 
     override fun onCreateView(
@@ -54,7 +44,6 @@ class FragmentPlayer : Fragment() {
     ): View? {
 
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
-
 //        shortPlayback = arguments?.getBoolean("short")
 //        if (shortPlayback == true) {
 //            currentSongIndex =
@@ -85,87 +74,73 @@ class FragmentPlayer : Fragment() {
 //            )
 //        }
 
-        var controllerIsPlaying = false
-        binding.seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser)
-                    controller?.seekTo(progress.toLong())
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                controllerIsPlaying = controller?.isPlaying!!
-                controller?.pause()
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if (controllerIsPlaying)
-                    controller?.play()
-                else
-                    controller?.pause()
-            }
-
-        })
-
-        observers()
-        clickListeners()
+//        var controllerIsPlaying = false
+//        binding.seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//                if (fromUser)
+//                    controller?.seekTo(progress.toLong())
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+//                controllerIsPlaying = controller?.isPlaying ?: false
+//                controller?.pause()
+//            }
+//
+//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+//                if (controllerIsPlaying)
+//                    controller?.play()
+//                else
+//                    controller?.pause()
+//            }
+//
+//        })
 
         return binding.root
     }
 
-    fun initializeController(songEntity: SongEntity) {
-        val context = requireContext()
-        controllerFuture = MediaController.Builder(
-            context,
-            SessionToken(
-                context, ComponentName(context, PlayerService::class.java)
-            )
-        ).buildAsync()
-        controllerFuture.addListener({
-            setController(songEntity)
-        }, MoreExecutors.directExecutor())
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //initializeController()
+        viewModel.initializeController(requireContext())
+        observers()
+        clickListeners()
     }
 
-    private fun setController(songEntity: SongEntity) {
-        val controller = this.controller ?: return
-        val mediaMetadata = MediaMetadata.Builder()
-            .setTitle(songEntity.songName)
-            .setArtist(songEntity.artist)
-            .setArtworkUri(songEntity.uri.toUri())
-            .build()
-        val mediaItem = MediaItem.Builder()
-            .setMediaMetadata(mediaMetadata)
-            .setMediaId(songEntity.id.toString())
-            .setUri(songEntity.uri)
-            .build()
-        controller.addMediaItem(mediaItem)
+//    fun initializeController() {
+//        val context = requireContext()
+//        val sessionToken = SessionToken(context, ComponentName(context, PlayerService::class.java))
+//        controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
+//        controllerFuture.addListener({
+//            controller = controllerFuture.get()
+//            checkPlaybackPosition(100)
+//            listeners()
+//        }, MoreExecutors.directExecutor())
+//
+//    }
 
-        controller.addListener(object : Player.Listener {
-            override fun onEvents(player: Player, events: Player.Events) {
-                if (events.containsAny(
-                        Player.EVENT_PLAY_WHEN_READY_CHANGED,
-                        Player.EVENT_PLAYBACK_STATE_CHANGED,
-                        Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED
-                    )
-                ) {
-//                    val duration = player.duration
-//                    binding.duration.text = duration.formatDuration()
-                }
-            }
+//    private fun listeners() {
+//        controller.addListener(object : Player.Listener {
+//
+//            override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+//            }
+//
+//        })
+//    }
 
-
-            override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-//                updateCurrentMetadata(
-//                    context,
-//                    mediaItem?.mediaId?.toLong()!!,
-//                    mediaItem.mediaMetadata.title.toString(),
-//                    mediaItem.mediaMetadata.artist.toString(),
-//                    mediaItem.mediaMetadata.artworkUri!!
-//                )
-//                checkPlaybackPosition(100)
-            }
-
-        })
-    }
+//    private fun setMediaItem(songEntity: SongEntity) {
+//        val mediaMetadata = MediaMetadata.Builder()
+//            .setTitle(songEntity.songName)
+//            .setArtist(songEntity.artist)
+//            .setArtworkUri(songEntity.uri.toUri())
+//            .build()
+//        val mediaItem = MediaItem.Builder()
+//            .setMediaMetadata(mediaMetadata)
+//            .setMediaId(songEntity.id.toString())
+//            .setUri(songEntity.uri)
+//            .build()
+//
+//        controller.setMediaItem(mediaItem)
+//    }
 
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -175,8 +150,8 @@ class FragmentPlayer : Fragment() {
                         is Response.Success -> {
                             val data = song.data
                             data?.let {
-                                initializeController(data)
-                                binding.playBackControls.visibility = View.VISIBLE
+//                                setMediaItem(data)
+                                binding.playerLayout.visibility = View.VISIBLE
                                 binding.MusicName.text = data.songName
                                 binding.ArtistName.text = data.artist
                             }
@@ -187,15 +162,43 @@ class FragmentPlayer : Fragment() {
                         }
 
                         is Response.Loading -> {
-                            binding.playBackControls.visibility = View.GONE
+                            binding.playerLayout.visibility = View.GONE
                         }
                     }
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.shouldShowPlayButton.collect {
+                    if (it) {
+                        binding.playButton.setImageResource(R.drawable.play_icon)
+                    } else {
+                        binding.playButton.setImageResource(R.drawable.pause_icon)
+                    }
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.duration.collect {
+                    binding.seekbar.max=it.toInt()
+                    binding.duration.text = it.formatDuration()
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.currentPosition.collect {
+                    binding.seekbar.progress=it.toInt()
+                    binding.currentPosition.text = it.formatDuration()
+                }
+            }
+        }
     }
 
-//    private fun updateRepeatUi(repeatOption: RepeatOption) {
+    //    private fun updateRepeatUi(repeatOption: RepeatOption) {
 ////        when (repeatOption) {
 ////            RepeatOption.OFF -> {
 ////                binding.repeatButton.setImageResource(R.drawable.repeat_off_icon)
@@ -224,16 +227,22 @@ class FragmentPlayer : Fragment() {
 ////            }
 ////        }
 //    }
+//    private fun checkPlaybackPosition(delayMs: Long): Boolean = handler.postDelayed({
+//        val currentPosition = controller.currentPosition ?: 0
+//        binding.currentPosition.text = currentPosition.formatDuration()
+//        checkPlaybackPosition(delayMs)
+//    }, delayMs)
 
     private fun clickListeners() {
         binding.playButton.setOnClickListener {
-            Util.handlePlayPauseButtonAction(controller)
-            val shouldShowPlayButton = Util.shouldShowPlayButton(controller)
-            if (shouldShowPlayButton) {
-                binding.playButton.setImageResource(R.drawable.play_icon)
-            } else {
-                binding.playButton.setImageResource(R.drawable.pause_icon)
-            }
+            viewModel.handlePlayPauseButton()
+//            Util.handlePlayPauseButtonAction(controller)
+//            val shouldShowPlayButton = Util.shouldShowPlayButton(controller)
+//            if (shouldShowPlayButton) {
+//                binding.playButton.setImageResource(R.drawable.play_icon)
+//            } else {
+//                binding.playButton.setImageResource(R.drawable.pause_icon)
+//            }
         }
 //        binding.skipNext.setOnClickListener {
 //            viewModel.nextMediaItem()
@@ -254,7 +263,7 @@ class FragmentPlayer : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        //releaseController()
         _binding = null
-
     }
 }

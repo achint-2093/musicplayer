@@ -17,7 +17,21 @@ class SongsRepository @Inject constructor(
     private val songsDao: SongsDao
 ) {
 
-    suspend fun fetchMusicFiles() {
+
+    suspend fun updateSongs() {
+        val songs = fetchMusicFiles()
+        insertSongs(songs)
+    }
+
+    suspend fun refreshSongs() {
+        val songs = fetchMusicFiles()
+        insertSongs(songs)
+        val savedSongs = fetchSongsFromDatabase()
+        val findDeletedSongs = findDeletedSongs(songs, savedSongs)
+        removeDeletedSongsFromDatabase(findDeletedSongs)
+    }
+
+    suspend fun fetchMusicFiles(): List<SongEntity> {
         return withContext(Dispatchers.IO) {
             val songs = mutableListOf<SongEntity>()
             val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -52,7 +66,31 @@ class SongsRepository @Inject constructor(
                     songs.add(song)
                 }
             }
+            songs
+        }
+    }
 
+    suspend fun fetchSongsFromDatabase(): List<SongEntity> {
+        return withContext(Dispatchers.IO) {
+            songsDao.getAllSongs()
+        }
+    }
+
+    fun findDeletedSongs(
+        deviceSongs: List<SongEntity>,
+        databaseSongs: List<SongEntity>
+    ): List<SongEntity> {
+        return databaseSongs.filter { dbSong -> deviceSongs.none { it.uri == dbSong.uri } }
+    }
+
+    suspend fun removeDeletedSongsFromDatabase(deletedSongs: List<SongEntity>) {
+        return withContext(Dispatchers.IO) {
+            songsDao.deleteSongs(deletedSongs)
+        }
+    }
+
+    private suspend fun insertSongs(songs: List<SongEntity>) {
+        return withContext(Dispatchers.IO) {
             songsDao.insertSongs(songs)
         }
     }

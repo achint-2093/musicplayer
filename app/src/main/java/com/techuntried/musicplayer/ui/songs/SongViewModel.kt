@@ -27,8 +27,17 @@ class SongViewModel @Inject constructor(
 
 
     init {
-
         fetchMusicFiles()
+    }
+
+     fun refreshSongs() {
+        viewModelScope.launch {
+          //  _songs.value = Response.Loading()
+            songsRepository.refreshSongs()
+//            roomRepository.getAllSongs().collect {
+//                _songs.value = Response.Success(it)
+//            }
+        }
     }
 
     private fun fetchMusicFiles() {
@@ -36,7 +45,7 @@ class SongViewModel @Inject constructor(
             try {
                 val isFirstTime = dataStoreRepository.isFirstTime() ?: true
                 if (isFirstTime) {
-                    songsRepository.fetchMusicFiles()
+                    songsRepository.updateSongs()
                     dataStoreRepository.saveFirstTime(false)
                 }
                 roomRepository.getAllSongs().collect {

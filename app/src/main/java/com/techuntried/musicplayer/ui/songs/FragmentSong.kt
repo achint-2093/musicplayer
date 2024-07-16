@@ -52,8 +52,14 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
         super.onViewCreated(view, savedInstanceState)
         setSongsAdapter()
         setObservers()
+        setOnClickListener()
     }
 
+    private fun setOnClickListener() {
+        binding.toolbar.setOnClickListener {
+            viewModel.refreshSongs()
+        }
+    }
     private fun setObservers() {
 
         viewLifecycleOwner.lifecycleScope.launch {

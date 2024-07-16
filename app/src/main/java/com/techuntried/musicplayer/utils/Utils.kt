@@ -33,7 +33,7 @@ fun PlaylistType.title(): String {
 }
 
 fun Long.formatDuration(): String {
-    val durationMillis=this
+    val durationMillis = this
     val hours = durationMillis / 3600000
     val minutes = (durationMillis % 3600000) / 60000
     val seconds = (durationMillis % 60000) / 1000
