@@ -33,7 +33,7 @@ class SongPickerAdapter(private val clickListener: SongPickerClickListener) :
             clickListener: SongPickerClickListener
         ) {
             binding.song = item
-            val position = adapterPosition
+            val position = bindingAdapterPosition
 
             if (position != RecyclerView.NO_POSITION) {
                 binding.root.setOnClickListener {
@@ -68,7 +68,7 @@ class SongPickerDiffUtil : DiffUtil.ItemCallback<SongPickerModel>() {
         oldItem: SongPickerModel,
         newItem: SongPickerModel
     ): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem.songId == newItem.songId
     }
 
     override fun areContentsTheSame(

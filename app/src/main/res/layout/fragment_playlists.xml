@@ -24,7 +24,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/playlists"
             app:titleTextAppearance="@style/BoldTitleText"
-            app:titleTextColor="@color/text_color" />
+            app:titleTextColor="@color/text_color"
+            tools:menu="@menu/playlist_menu" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/playListRecyclerView"
@@ -41,6 +42,19 @@
             android:layout_height="wrap_content"
             android:indeterminateTint="@color/button_color"
             android:progressTint="@color/button_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/empty_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Playlist found"
+            android:textColor="@color/text_color"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

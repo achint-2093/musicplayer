@@ -31,13 +31,29 @@ class SongPickerViewModel @Inject constructor(
 
     private fun getAllSongs() {
         viewModelScope.launch {
-            val allSongs = roomRepository.getSongs().collect{
-                _songList.value =
-                    Response.Success(it.map { SongPickerModel(it.id, it.songName) })
+            val allSongs = roomRepository.getAllSongs().map {
+                SongPickerModel(
+                    songId = it.id,
+                    name = it.songName,
+                    artistName = it.artist
+                )
             }
+
+            val alreadyAddedSongs = roomRepository.getPlaylistSongs(playlistId).map { it.id }.toSet()
+
+            val updatedSongs = allSongs.map { song ->
+                if (song.songId in alreadyAddedSongs) {
+                    song.copy(isInPlaylist = true)
+                } else {
+                    song
+                }
+            }
+
+            _songList.value = Response.Success(updatedSongs)
 
         }
     }
+
 
     fun removeSongFromPlaylist(songId: Long) {
         viewModelScope.launch {

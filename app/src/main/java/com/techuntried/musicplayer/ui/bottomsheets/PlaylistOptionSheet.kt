@@ -8,36 +8,33 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.OptionUi
-import com.techuntried.musicplayer.databinding.SongOptionSheetBinding
-import com.techuntried.musicplayer.utils.Constants
+import com.techuntried.musicplayer.databinding.PlaylistOptionSheetBinding
+import com.techuntried.musicplayer.utils.PlaylistOptions
 import com.techuntried.musicplayer.utils.SongOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SongOptionsSheet : BottomSheetDialogFragment() {
+class PlaylistOptionSheet : BottomSheetDialogFragment() {
 
     companion object {
-        private const val ARG_SONG_NAME = "song_name"
-        private const val ARG_PLAYLIST_ID = "playlist_id"
+        private const val ARG_PLAYLIST_NAME = "playlist_name"
 
         fun newInstance(
-            songName: String,
-            playlistId: Long
-        ): SongOptionsSheet {
+            playlistName: String,
+        ): PlaylistOptionSheet {
             val args = Bundle().apply {
-                putString(ARG_SONG_NAME, songName)
-                putLong(ARG_PLAYLIST_ID, playlistId)
+                putString(ARG_PLAYLIST_NAME, playlistName)
             }
-            return SongOptionsSheet().apply {
+            return PlaylistOptionSheet().apply {
                 arguments = args
             }
         }
     }
 
-    private var _binding: SongOptionSheetBinding? = null
+    private var _binding: PlaylistOptionSheetBinding? = null
     private val binding get() = _binding!!
-    private var selectedOption: SongOptions? = null
-    private var songSheetCallback: BottomSheetCallback? = null
+    private var selectedOption: PlaylistOptions? = null
+    private var playlistOptionSheetCallback: BottomSheetCallback? = null
 
 
     override fun onCreateView(
@@ -45,7 +42,7 @@ class SongOptionsSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = SongOptionSheetBinding.inflate(inflater, container, false)
+        _binding = PlaylistOptionSheetBinding.inflate(inflater, container, false)
 
 //        song = arguments?.getParcelable(ARG_SONG)
 //        binding.displayName.text = song?.songName
@@ -61,38 +58,41 @@ class SongOptionsSheet : BottomSheetDialogFragment() {
     }
 
     private fun setUi() {
-        val songName = arguments?.getString(ARG_SONG_NAME)
-        val playlistId = arguments?.getLong(ARG_PLAYLIST_ID)
-        binding.displayName.text = songName
-        if (playlistId == Constants.PLAYLIST_ID_ALL) {
-            binding.shareSong.songOption = OptionUi("Share song", R.drawable.share_icon)
-            binding.deleteSong.songOption = OptionUi("Delete song", R.drawable.delete_icon)
-        }
+        val playlistName = arguments?.getString(ARG_PLAYLIST_NAME)
+        binding.displayName.text = playlistName
+        binding.shareSong.songOption = OptionUi("Share song", R.drawable.share_icon)
+        binding.deletePlaylist.songOption = OptionUi("Delete Playlist", R.drawable.delete_icon)
+        binding.editPlaylist.songOption = OptionUi("Edit Playlist", R.drawable.edit_icon)
+
     }
 
     private fun setOnClickListeners() {
         binding.shareSong.root.setOnClickListener {
-            selectedOption = SongOptions.Share
+            selectedOption = PlaylistOptions.Share
             dismiss()
         }
-        binding.deleteSong.root.setOnClickListener {
-            selectedOption = SongOptions.Delete
+        binding.deletePlaylist.root.setOnClickListener {
+            selectedOption = PlaylistOptions.Delete
+            dismiss()
+        }
+        binding.editPlaylist.root.setOnClickListener {
+            selectedOption = PlaylistOptions.Edit
             dismiss()
         }
     }
 
     fun setBottomSheetCallback(callback: BottomSheetCallback) {
-        songSheetCallback = callback
+        playlistOptionSheetCallback = callback
     }
 
     interface BottomSheetCallback {
-        fun onSongOptionSheetDismissed(selectedOption: SongOptions?)
+        fun onPlaylistOptionSheetDismissed(selectedOption: PlaylistOptions?)
     }
 
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        songSheetCallback?.onSongOptionSheetDismissed(selectedOption)
+        playlistOptionSheetCallback?.onPlaylistOptionSheetDismissed(selectedOption)
     }
 
     override fun onDestroyView() {

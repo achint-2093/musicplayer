@@ -24,6 +24,9 @@ enum class PlaylistType {
 enum class SongOptions {
     Share, Delete
 }
+enum class PlaylistOptions {
+    Share, Delete,Edit
+}
 
 fun PlaylistType.title(): String {
     return when (this) {

@@ -100,6 +100,7 @@ class FragmentSongPicker : Fragment() {
                 } else {
                     viewModel.addSongToPlaylist(songId = song.songId)
                 }
+                adapter.toggleSongSelection(position)
 //                mPosition=position
 //                val find=songs?.find { it.songId==song.songId }
 //                if (find!=null) {

@@ -21,10 +21,6 @@ class PlaylistsAdapter(
         holder.bind(getItem(position), clickListener)
     }
 
-    fun getPlaylist(position: Int): PlaylistEntity {
-        return getItem(position)
-    }
-
     class MyViewHolder private constructor(private val binding: PlaylistItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -33,9 +29,11 @@ class PlaylistsAdapter(
             clickListener: PlaylistClickListener
         ) {
             binding.playList = item
-
             binding.root.setOnClickListener {
                 clickListener.onClick(item)
+            }
+            binding.moreButton.setOnClickListener {
+                clickListener.onMoreClick(playlist = item)
             }
         }
 

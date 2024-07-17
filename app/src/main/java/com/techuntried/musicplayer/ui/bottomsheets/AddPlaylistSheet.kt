@@ -18,7 +18,7 @@ class AddPlaylistSheet : BottomSheetDialogFragment() {
         private const val ARG_PLAYLIST_TYPE = "playlist_type"
 
         fun newInstance(
-            playlistName: String,
+            playlistName: String?,
             playlistType: PlaylistType,
         ): AddPlaylistSheet {
             val args = Bundle().apply {
@@ -48,26 +48,31 @@ class AddPlaylistSheet : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         _binding = FragmentAddPlaylistSheetBinding.inflate(inflater, container, false)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         playlistName = arguments?.getString(ARG_PLAYLIST_NAME)
         playlistType = arguments?.getSerializable(ARG_PLAYLIST_TYPE) as PlaylistType
 
-        binding.bookmarkText.text = playlistType.title()
-        binding.ChapterNameText.text = playlistName
+        binding.playlistText.text = playlistType.title()
+        if (playlistName!=null){
+            binding.playlistNameInput.setText(playlistName)
+        }
         setClickListeners()
-
-        return binding.root
     }
 
     private fun setClickListeners() {
         binding.ContinueButton.setOnClickListener {
-            updatedName = binding.notes.text.toString()
+            updatedName = binding.playlistNameInput.text.toString()
             isContinueClicked = true
             dismiss()
         }
     }
 
     interface BottomSheetCallback {
-        fun onPlaylistSheetDismissed(playlistName: String)
+        fun onAddPlaylistSheetDismissed(playlistName: String, playlistType: PlaylistType)
     }
 
 
@@ -78,7 +83,7 @@ class AddPlaylistSheet : BottomSheetDialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         if (isContinueClicked) {
-            bottomSheetCallback?.onPlaylistSheetDismissed(updatedName)
+            bottomSheetCallback?.onAddPlaylistSheetDismissed(updatedName,playlistType)
         }
     }
 

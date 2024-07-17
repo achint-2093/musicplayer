@@ -19,6 +19,10 @@ class PlayListsViewModel @Inject constructor(private val roomRepository: RoomRep
     val playlists: StateFlow<Response<List<PlaylistEntity>>>
         get() = _playlists
 
+    private val _playlistAction = MutableStateFlow<Response<String>?>(null)
+    val playlistAction: StateFlow<Response<String>?>
+        get() = _playlistAction
+
     init {
         getPlaylists("")
     }
@@ -40,7 +44,12 @@ class PlayListsViewModel @Inject constructor(private val roomRepository: RoomRep
 
     fun deletePlayList(playlistEntity: PlaylistEntity) {
         viewModelScope.launch {
-            roomRepository.deletePlaylist(playlistEntity)
+            try {
+                roomRepository.deletePlaylist(playlistEntity)
+                _playlistAction.value = Response.Success("Playlist Deleted")
+            } catch (e: Exception) {
+                _playlistAction.value = Response.Error(e.message.toString())
+            }
         }
     }
 
@@ -48,6 +57,10 @@ class PlayListsViewModel @Inject constructor(private val roomRepository: RoomRep
         viewModelScope.launch {
             roomRepository.updatePlaylist(playlistEntity)
         }
+    }
+
+    fun clearPlaylistAction() {
+        _playlistAction.value = null
     }
 
 }

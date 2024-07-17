@@ -3,5 +3,67 @@
     <style name="Base.Theme.MusicPlayer" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <item name="searchViewStyle">@style/mySearchView</item>
+        <item name="autoCompleteTextViewStyle">@style/searchView_auto_text_style</item>
+        <item name="colorControlActivated">@color/button_color</item>
     </style>
+    <style name="RoundedCornerAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/round_corners_shape</item>
+    </style>
+
+    <!-- toolbar style -->
+    <style name="MyToolbarStyle" parent="ThemeOverlay.Material3.Light">
+        <item name="android:textColorPrimary">@color/text_color</item>
+        <item name="android:textColorSecondary">@color/icon_color</item>
+    </style>
+
+
+    <style name="BoldTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <!--        <item name="fontFamily">@font/rubik_medium</item>-->
+        <item name="android:textSize">@dimen/text_title</item>
+    </style>
+    <!-- toolbar style -->
+
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:textSize">@dimen/button_text</item>
+        <!--        <item name="android:fontFamily">@font/rubik_medium</item>-->
+        <item name="android:background">@drawable/round_corners_shape</item>
+        <item name="android:backgroundTint">@color/button_color</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/button_text</item>
+    </style>
+
+    <style name="TextSelectHandlers">
+        <item name="colorControlActivated">@color/text_handler_color</item>
+        <item name="android:textColorHighlight">@color/text_highlight_color</item>
+    </style>
+
+    <!-- bottom sheet style -->
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_round</item>
+    </style>
+    <!-- bottom sheet style -->
+
+    <!--    cursor color of search view toolbar also apply this in app theme above -->
+    <style name="searchView_auto_text_style" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textColorHighlight">@color/text_highlight_color</item>
+    </style>
+    <!--    cursor color of search view toolbar also apply this in app theme above -->
+
+    <!-- search view style -->
+    <style name="mySearchView" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
+        <item name="closeIcon">@null</item>
+    </style>
+    <!-- search view style -->
 </resources>

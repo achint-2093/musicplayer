@@ -33,6 +33,7 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
     private val args: FragmentPlaylistSongsArgs by navArgs()
     private lateinit var adapter: SongsAdapter
     private val viewModel: PlaylistSongViewModel by viewModels()
+    private lateinit var selectedSong: SongEntity
     private lateinit var songSheetCallback: SongOptionsSheet.BottomSheetCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,10 +69,14 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
         binding.toolbar.inflateMenu(R.menu.playlist_songs_menu)
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-//                R.id.favourites -> {
-//                    findNavController().navigate(R.id.action_fragmentHome_to_fragmentFavorites)
-//                    true
-//                }
+                R.id.add_songs_action -> {
+                    val action =
+                        FragmentPlaylistSongsDirections.actionFragmentPlaylistSongsToFragmentSongPicker(
+                            args.playlistId
+                        )
+                    findNavController().navigate(action)
+                    true
+                }
 
                 else -> false
             }
@@ -88,23 +93,26 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
                             binding.progressBar.visibility = View.GONE
                             val data = playlistSongs.data ?: emptyList()
                             if (data.isNotEmpty()) {
+                                binding.emptyLayout.visibility = View.GONE
                                 binding.playlistSongRecyclerView.visibility = View.VISIBLE
                                 adapter.submitList(data)
 
                             } else {
-                                binding.progressBar.visibility = View.GONE
+                                binding.playlistSongRecyclerView.visibility = View.GONE
+                                binding.emptyLayout.visibility = View.VISIBLE
                             }
-
                         }
 
                         is Response.Error -> {
                             binding.playlistSongRecyclerView.visibility = View.GONE
                             binding.progressBar.visibility = View.GONE
+                            binding.emptyLayout.visibility = View.GONE
                             showSnackBar(binding.root, playlistSongs.errorMessage.toString())
                         }
 
                         is Response.Loading -> {
                             binding.playlistSongRecyclerView.visibility = View.GONE
+                            binding.emptyLayout.visibility = View.GONE
                             binding.progressBar.visibility = View.VISIBLE
                         }
                     }
@@ -116,11 +124,19 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
     private fun setSongsAdapter() {
         adapter = SongsAdapter(object : SongsClickListener {
             override fun onClick(songEntity: SongEntity) {
-                TODO("Not yet implemented")
+                val action =
+                    FragmentPlaylistSongsDirections.actionFragmentPlaylistSongsToFragmentPlayer(
+                        songEntity.id, args.playlistId
+                    )
+                findNavController().navigate(action)
             }
 
             override fun onMoreClick(songEntity: SongEntity) {
-                TODO("Not yet implemented")
+                selectedSong = songEntity
+                val songsBottomSheet =
+                    SongOptionsSheet.newInstance(songEntity.songName, playlistId = args.playlistId)
+                songsBottomSheet.setBottomSheetCallback(songSheetCallback)
+                songsBottomSheet.show(parentFragmentManager, "songsBottomSheet")
             }
 
         })
@@ -129,21 +145,7 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
     }
 
     private fun setOnClickListeners() {
-        binding.toolbar.setOnClickListener {
-            val action =
-                FragmentPlaylistSongsDirections.actionFragmentPlaylistSongsToFragmentSongPicker(
-                    args.playlistId
-                )
-            findNavController().navigate(action)
-        }
-//        binding.addToPlaylist.setOnClickListener {
-//            val action =
-//                FragmentPlaylistSongsDirections.actionFragmentPlaylistSongsToFragmentPlaylistSongSelection(
-//                    PlaylistsEntity(playListId!!, playListName!!)
-//                )
-//            findNavController().navigate(action)
-//
-//        }
+
     }
 
 //    private fun showDialog(

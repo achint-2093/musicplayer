@@ -15,7 +15,9 @@ import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.PlaylistEntity
 import com.techuntried.musicplayer.databinding.FragmentPlaylistsBinding
 import com.techuntried.musicplayer.ui.bottomsheets.AddPlaylistSheet
+import com.techuntried.musicplayer.ui.bottomsheets.PlaylistOptionSheet
 import com.techuntried.musicplayer.utils.CustomAlertDialog
+import com.techuntried.musicplayer.utils.PlaylistOptions
 import com.techuntried.musicplayer.utils.PlaylistType
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.showSnackBar
@@ -23,28 +25,27 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
+class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
+    PlaylistOptionSheet.BottomSheetCallback {
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: PlaylistsAdapter
     private val viewModel: PlayListsViewModel by viewModels()
-
-    private lateinit var playlistSheetCallback: AddPlaylistSheet.BottomSheetCallback
-    private var createdPlaylistName: String? = null
-    // private var deletedItem: PlaylistsEntity? = null
+    private lateinit var selectedPlaylist: PlaylistEntity
+    private lateinit var addPlaylistSheetCallback: AddPlaylistSheet.BottomSheetCallback
+    private lateinit var playlistOptionsSheetCallback: PlaylistOptionSheet.BottomSheetCallback
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        playlistSheetCallback = this
-
+        addPlaylistSheetCallback = this
+        playlistOptionsSheetCallback = this
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
@@ -70,10 +71,9 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
                 }
 
                 R.id.add_playlists_action -> {
-                    val playlistSheet = AddPlaylistSheet.newInstance("", PlaylistType.Add)
-                    playlistSheet.setBottomSheetCallback(playlistSheetCallback)
+                    val playlistSheet = AddPlaylistSheet.newInstance(null, PlaylistType.Add)
+                    playlistSheet.setBottomSheetCallback(addPlaylistSheetCallback)
                     playlistSheet.show(parentFragmentManager, "AddPlaylistSheet")
-                    //  findNavController().navigate(R.id.action_fragmentHome_to_fragmentFavorites)
                     true
                 }
 
@@ -92,10 +92,12 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
                             binding.progressBar.visibility = View.GONE
                             val data = playlists.data ?: emptyList()
                             if (data.isNotEmpty()) {
+                                binding.emptyLayout.visibility = View.GONE
                                 binding.playListRecyclerView.visibility = View.VISIBLE
                                 adapter.submitList(data)
                             } else {
-
+                                binding.playListRecyclerView.visibility = View.GONE
+                                binding.emptyLayout.visibility = View.VISIBLE
                             }
                         }
 
@@ -103,11 +105,13 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
                         is Response.Error -> {
                             binding.playListRecyclerView.visibility = View.GONE
                             binding.progressBar.visibility = View.GONE
+                            binding.emptyLayout.visibility = View.GONE
                             showSnackBar(binding.root, playlists.errorMessage.toString())
                         }
 
                         is Response.Loading -> {
                             binding.playListRecyclerView.visibility = View.GONE
+                            binding.emptyLayout.visibility = View.GONE
                             binding.progressBar.visibility = View.VISIBLE
                         }
                     }
@@ -115,6 +119,30 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
             }
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.playlistAction.collect { playlistAction ->
+                    playlistAction?.let {
+                        when (playlistAction) {
+                            is Response.Success -> {
+                                binding.progressBar.visibility = View.GONE
+                                showSnackBar(binding.root, playlistAction.errorMessage.toString())
+                            }
+
+                            is Response.Error -> {
+                                binding.progressBar.visibility = View.GONE
+                                showSnackBar(binding.root, playlistAction.errorMessage.toString())
+                            }
+
+                            is Response.Loading -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                            }
+                        }
+                        viewModel.clearPlaylistAction()
+                    }
+                }
+            }
+        }
     }
 
 
@@ -129,7 +157,10 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
             }
 
             override fun onMoreClick(playlist: PlaylistEntity) {
-                TODO("Not yet implemented")
+                selectedPlaylist = playlist
+                val playlistOptionsSheet = PlaylistOptionSheet.newInstance(playlist.playListName)
+                playlistOptionsSheet.setBottomSheetCallback(playlistOptionsSheetCallback)
+                playlistOptionsSheet.show(parentFragmentManager, "PlaylistOptionSheet")
             }
         })
         binding.playListRecyclerView.adapter = adapter
@@ -137,30 +168,14 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
-
-    private fun createPlaylist(playListName: String) {
-        viewModel.addPlayList(PlaylistEntity(0, playListName))
-    }
-
-//    override fun onDataDismissed(selectedOption: Int, playlist: PlaylistsEntity) {
-//        if (selectedOption == 0) {
-//            showDeleteDialog(playlist)
-//        }
-//    }
-
     private fun setClickListeners() {
 
     }
 
     private fun showDeleteDialog(playlist: PlaylistEntity) {
-        val title = "Delete"
-        val description = "Are you sure"
-        val btnText = "Confirm"
+        val title = getString(R.string.delete_title)
+        val description = getString(R.string.delete_confirm)
+        val btnText = getString(R.string.delete_title)
         val dialog = CustomAlertDialog(requireContext())
         dialog.setTitle(title)
         dialog.setDescription(description)
@@ -172,8 +187,40 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback {
     }
 
 
-    override fun onPlaylistSheetDismissed(playlistName: String) {
-        createPlaylist(playlistName)
+    override fun onAddPlaylistSheetDismissed(playlistName: String, playlistType: PlaylistType) {
+        when (playlistType) {
+            PlaylistType.Add -> {
+                viewModel.addPlayList(PlaylistEntity(0, playlistName))
+            }
+
+            PlaylistType.Update -> {
+                viewModel.updatePlayList(selectedPlaylist.copy(playListName = playlistName))
+            }
+        }
+
     }
 
+    override fun onPlaylistOptionSheetDismissed(selectedOption: PlaylistOptions?) {
+        selectedOption?.let {
+            when (it) {
+                PlaylistOptions.Share -> {}
+                PlaylistOptions.Delete -> {
+                    showDeleteDialog(selectedPlaylist)
+                }
+
+                PlaylistOptions.Edit -> {
+                    val playlistSheet = AddPlaylistSheet.newInstance(
+                        selectedPlaylist.playListName, PlaylistType.Update
+                    )
+                    playlistSheet.setBottomSheetCallback(addPlaylistSheetCallback)
+                    playlistSheet.show(parentFragmentManager, "AddPlaylistSheet")
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

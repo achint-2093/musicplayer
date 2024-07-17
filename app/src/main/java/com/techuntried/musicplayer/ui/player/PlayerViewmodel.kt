@@ -18,6 +18,7 @@ import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.techuntried.musicplayer.data.models.SongEntity
+import com.techuntried.musicplayer.data.repository.DataStoreRepository
 import com.techuntried.musicplayer.data.repository.RoomRepository
 import com.techuntried.musicplayer.utils.Constants
 import com.techuntried.musicplayer.utils.PlayerService
@@ -30,7 +31,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewmodel @Inject constructor(
-    private val roomRepository: RoomRepository, private val savedStateHandle: SavedStateHandle
+    private val roomRepository: RoomRepository,
+    private val savedStateHandle: SavedStateHandle,
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
     private val songId = savedStateHandle.get<Long>("songId")
@@ -65,6 +68,12 @@ class PlayerViewmodel @Inject constructor(
     private lateinit var controller: MediaController
     private val handler = Handler(Looper.getMainLooper())
 
+    init {
+        viewModelScope.launch {
+            if (songId != null && playlistId != null)
+                dataStoreRepository.saveCurrentSong(songId, playlistId)
+        }
+    }
 
     private fun fetchSongs(songId: Long?, playlistId: Long?) {
         viewModelScope.launch {
@@ -85,6 +94,7 @@ class PlayerViewmodel @Inject constructor(
                 }
             }
             setMediaItems()
+
         }
     }
 
@@ -132,7 +142,7 @@ class PlayerViewmodel @Inject constructor(
 
     fun previousMediaItem() {
         if (currentSongIndex.value > 0) {
-            _currentSongIndex.value=currentSongIndex.value-1
+            _currentSongIndex.value = currentSongIndex.value - 1
             controller.seekTo(currentSongIndex.value, 0)
             _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
         }
@@ -141,7 +151,7 @@ class PlayerViewmodel @Inject constructor(
 
     fun nextMediaItem() {
         if (currentSongIndex.value < playlist.value.size - 1) {
-            _currentSongIndex.value=currentSongIndex.value+1
+            _currentSongIndex.value = currentSongIndex.value + 1
             controller.seekTo(currentSongIndex.value, 0)
             _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
         }

@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentSongsBinding
 import com.techuntried.musicplayer.ui.bottomsheets.SongOptionsSheet
@@ -29,11 +30,12 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
 
     private val viewModel: SongViewModel by viewModels()
     private lateinit var adapter: SongsAdapter
+    private lateinit var selectedSong: SongEntity
     private lateinit var songSheetCallback: SongOptionsSheet.BottomSheetCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //  songSheetCallback = this
+        songSheetCallback = this
     }
 
     override fun onCreateView(
@@ -43,23 +45,33 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
         // Inflate the layout for this fragment
         _binding = FragmentSongsBinding.inflate(inflater, container, false)
 
-
-
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUi()
         setSongsAdapter()
         setObservers()
         setOnClickListener()
     }
 
-    private fun setOnClickListener() {
-        binding.toolbar.setOnClickListener {
-            viewModel.refreshSongs()
+    private fun setUi() {
+        binding.toolbar.inflateMenu(R.menu.songs_menu)
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.refresh_songs_action -> {
+                    viewModel.refreshSongs()
+                    true
+                }
+
+                else -> false
+            }
         }
+    }
+
+    private fun setOnClickListener() {
+
     }
 
     private fun setObservers() {
@@ -109,13 +121,11 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
             }
 
             override fun onMoreClick(songEntity: SongEntity) {
-//                val songsBottomSheet = SongOptionsSheet.newInstance(
-//                    song, PlaylistsEntity(
-//                        -1000, "all"
-//                    )
-//                )
-//                songsBottomSheet.setBottomSheetCallback(songSheetCallback)
-//                songsBottomSheet.show(parentFragmentManager, "songsBottomSheet")
+                selectedSong = songEntity
+                val songsBottomSheet =
+                    SongOptionsSheet.newInstance(songEntity.songName, Constants.PLAYLIST_ID_ALL)
+                songsBottomSheet.setBottomSheetCallback(songSheetCallback)
+                songsBottomSheet.show(parentFragmentManager, "songsBottomSheet")
 
             }
 
@@ -130,7 +140,17 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     }
 
     override fun onSongOptionSheetDismissed(selectedOption: SongOptions?) {
-        TODO("Not yet implemented")
+        selectedOption?.let {
+            when (it) {
+                SongOptions.Share -> {
+
+                }
+
+                SongOptions.Delete -> {
+
+                }
+            }
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package com.techuntried.musicplayer.data.models
 
-data class SongOptionUi(
+data class OptionUi(
     val optionName: String,
     val optionIcon: Int
 )

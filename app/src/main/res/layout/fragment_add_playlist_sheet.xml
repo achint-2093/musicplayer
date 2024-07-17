@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="16dp"
         tools:background="@color/box_background"
         tools:context=".ui.bottomsheets.AddPlaylistSheet">
 
@@ -26,7 +26,7 @@
 
 
         <TextView
-            android:id="@+id/bookmarkText"
+            android:id="@+id/playlist_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -35,17 +35,6 @@
             android:textSize="@dimen/text_head"
             tools:text="Add to Bookmarks" />
 
-        <TextView
-            android:id="@+id/ChapterNameText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_title"
-            tools:text="chaptername" />
 
         <TextView
             android:layout_width="match_parent"
@@ -54,24 +43,25 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:text="add_a_note_optional"
+            android:text="Playlist Name"
             android:textColor="@color/text_color_light"
             android:textSize="@dimen/text_normal" />
 
 
         <EditText
-            android:id="@+id/notes"
+            android:id="@+id/playlist_name_input"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
             android:background="@drawable/round_corners_shape"
             android:backgroundTint="@color/background"
             android:gravity="center_vertical"
-            android:hint="notes"
+            android:hint="Bollywood"
             android:inputType="textMultiLine"
             android:maxLength="100"
+            android:minHeight="@dimen/button_height"
             android:minLines="1"
             android:padding="10dp"
             android:textColor="@color/text_color"

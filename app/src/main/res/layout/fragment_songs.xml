@@ -23,6 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:title="Songs"
+            tools:menu="@menu/songs_menu"
             app:titleTextAppearance="@style/BoldTitleText"
             app:titleTextColor="@color/text_color" />
 

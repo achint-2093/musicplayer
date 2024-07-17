@@ -50,6 +50,7 @@
             android:maxLines="1"
             android:textColor="@color/text_color_light"
             android:textSize="14sp"
+            android:text="@{song.artistName}"
             app:layout_constraintBottom_toBottomOf="@+id/musicImage"
             app:layout_constraintEnd_toEndOf="@+id/musicName"
             app:layout_constraintStart_toStartOf="@+id/musicName"
@@ -63,8 +64,8 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:padding="8dp"
-            android:src="@drawable/add_icon"
-
+            tools:src="@drawable/add_icon"
+            app:isInPlaylistIcon="@{song.inPlaylist}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_fragmentPlaylistSongs_to_fragmentSongPicker"
             app:destination="@id/fragmentSongPicker" />
+        <action
+            android:id="@+id/action_fragmentPlaylistSongs_to_fragmentPlayer"
+            app:destination="@id/fragmentPlayer" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSongPicker"

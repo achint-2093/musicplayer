@@ -3,6 +3,12 @@
     <style name="Base.Theme.MusicPlayer" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <item name="searchViewStyle">@style/mySearchView</item>
+        <item name="autoCompleteTextViewStyle">@style/searchView_auto_text_style</item>
+        <item name="colorControlActivated">@color/button_color</item>
     </style>
 
     <style name="Theme.MusicPlayer" parent="Base.Theme.MusicPlayer" />
@@ -38,4 +44,29 @@
         <item name="colorControlActivated">@color/text_handler_color</item>
         <item name="android:textColorHighlight">@color/text_highlight_color</item>
     </style>
+
+    <!-- bottom sheet style -->
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_round</item>
+    </style>
+    <!-- bottom sheet style -->
+
+    <!--    cursor color of search view toolbar also apply this in app theme above -->
+    <style name="searchView_auto_text_style" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textColorHighlight">@color/text_highlight_color</item>
+    </style>
+    <!--    cursor color of search view toolbar also apply this in app theme above -->
+
+    <!-- search view style -->
+    <style name="mySearchView" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
+        <item name="closeIcon">@null</item>
+    </style>
+    <!-- search view style -->
 </resources>
