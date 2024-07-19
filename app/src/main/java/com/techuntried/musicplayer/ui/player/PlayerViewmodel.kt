@@ -1,6 +1,5 @@
 package com.techuntried.musicplayer.ui.player
 
-import android.content.ComponentName
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -14,14 +13,12 @@ import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.util.Util
 import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.data.repository.DataStoreRepository
 import com.techuntried.musicplayer.data.repository.RoomRepository
 import com.techuntried.musicplayer.utils.Constants
-import com.techuntried.musicplayer.utils.PlayerService
+import com.techuntried.musicplayer.utils.MediaControllerObject
 import com.techuntried.musicplayer.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +30,8 @@ import javax.inject.Inject
 class PlayerViewmodel @Inject constructor(
     private val roomRepository: RoomRepository,
     private val savedStateHandle: SavedStateHandle,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val mediaControllerFuture: ListenableFuture<MediaController>
 ) : ViewModel() {
 
     private val songId = savedStateHandle.get<Long>("songId")
@@ -51,7 +49,6 @@ class PlayerViewmodel @Inject constructor(
     val playlist: StateFlow<List<SongEntity>>
         get() = _playlist
 
-
     private val _currentPosition = MutableStateFlow(0L)
     val currentPosition: StateFlow<Long>
         get() = _currentPosition
@@ -64,15 +61,16 @@ class PlayerViewmodel @Inject constructor(
     val shouldShowPlayButton: StateFlow<Boolean>
         get() = _shouldShowPlayButton
 
-    private lateinit var controllerFuture: ListenableFuture<MediaController>
-    private lateinit var controller: MediaController
+    // private lateinit var controllerFuture: ListenableFuture<MediaController>
+    private var mediaController: MediaController? = null
     private val handler = Handler(Looper.getMainLooper())
 
+
     init {
-        viewModelScope.launch {
-            if (songId != null && playlistId != null)
-                dataStoreRepository.saveCurrentSong(songId, playlistId)
-        }
+        mediaController = MediaControllerObject.getMediaController()
+        fetchSongs(songId, playlistId)
+        listeners()
+        setUi()
     }
 
     private fun fetchSongs(songId: Long?, playlistId: Long?) {
@@ -93,21 +91,37 @@ class PlayerViewmodel @Inject constructor(
                     _currentSongIndex.value = songIndex
                 }
             }
-            setMediaItems()
+
+//           // if (lastSongId != songId || lastPlaylistId != playlistId) {
+            val lastSongId = dataStoreRepository.getCurrentSong()
+            val lastPlaylistId = dataStoreRepository.getCurrentPlaylist()
+
+            if (!mediaController?.isPlaying!! || lastSongId != songId || lastPlaylistId != playlistId) {
+                mediaController?.clearMediaItems()
+                setMediaItems()
+            }else{
+                playCurrentSong()
+            }
+//           // }
 
         }
     }
 
     fun initializeController(context: Context) {
-        val sessionToken = SessionToken(context, ComponentName(context, PlayerService::class.java))
-        controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
-        controllerFuture.addListener({
-            controller = controllerFuture.get()
-            controller.playWhenReady = false
-            fetchSongs(songId, playlistId)
-            setUi()
-            listeners()
-        }, MoreExecutors.directExecutor())
+        viewModelScope.launch {
+//            val lastSongId = dataStoreRepository.getCurrentSong()
+//            val lastPlaylistId = dataStoreRepository.getCurrentPlaylist()
+////            if (lastSongId != songId || lastPlaylistId != playlistId) {
+//            if (controller == null) {
+
+
+//            } else {
+//                if (controller?.isPlaying!!) {
+//                    fetchSongs(songId, playlistId)
+//                }
+//            }
+
+        }
     }
 
     private fun setUi() {
@@ -115,7 +129,7 @@ class PlayerViewmodel @Inject constructor(
     }
 
     private fun listeners() {
-        controller.addListener(object : Player.Listener {
+        mediaController?.addListener(object : Player.Listener {
             override fun onEvents(player: Player, events: Player.Events) {
                 if (events.containsAny(
                         Player.EVENT_PLAY_WHEN_READY_CHANGED,
@@ -135,6 +149,12 @@ class PlayerViewmodel @Inject constructor(
 
 
             override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                viewModelScope.launch {
+                    if (songId != null && playlistId != null) {
+                        dataStoreRepository.saveCurrentSong(songId)
+                        //                   dataStoreRepository.saveCurrentPlaylist(playlistId)
+                    }
+                }
             }
 
         })
@@ -143,7 +163,7 @@ class PlayerViewmodel @Inject constructor(
     fun previousMediaItem() {
         if (currentSongIndex.value > 0) {
             _currentSongIndex.value = currentSongIndex.value - 1
-            controller.seekTo(currentSongIndex.value, 0)
+            mediaController?.seekTo(currentSongIndex.value, 0)
             _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
         }
 
@@ -152,7 +172,7 @@ class PlayerViewmodel @Inject constructor(
     fun nextMediaItem() {
         if (currentSongIndex.value < playlist.value.size - 1) {
             _currentSongIndex.value = currentSongIndex.value + 1
-            controller.seekTo(currentSongIndex.value, 0)
+            mediaController?.seekTo(currentSongIndex.value, 0)
             _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
         }
     }
@@ -165,31 +185,42 @@ class PlayerViewmodel @Inject constructor(
             val mediaItem =
                 MediaItem.Builder().setMediaMetadata(mediaMetadata).setMediaId(song.id.toString())
                     .setUri(song.uri).build()
-            controller.addMediaItem(mediaItem)
+            mediaController?.addMediaItem(mediaItem)
 
         }
-        controller.seekTo(currentSongIndex.value, 0)
+        mediaController?.seekTo(currentSongIndex.value, 0)
+        playCurrentSong()
+//        controller.seekTo(currentSongIndex.value, 0)
+//        _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
+//        viewModelScope.launch {
+//            if (songId != null && playlistId != null) {
+////                dataStoreRepository.saveCurrentSong(songId)
+//                dataStoreRepository.saveCurrentPlaylist(playlistId)
+//            }
+//        }
+    }
+
+    fun playCurrentSong() {
+        //mediaController?.seekTo(currentSongIndex.value, 0)
         _currentSong.value = Response.Success(playlist.value.get(currentSongIndex.value))
+        viewModelScope.launch {
+            if (songId != null && playlistId != null) {
+                dataStoreRepository.saveCurrentSong(songId)
+                dataStoreRepository.saveCurrentPlaylist(playlistId)
+            }
+        }
     }
 
     private fun checkPlaybackPosition(delayMs: Long): Boolean = handler.postDelayed({
-        val currentPosition = controller.currentPosition ?: 0
+        val currentPosition = mediaController?.currentPosition ?: 0
         _currentPosition.value = currentPosition
         checkPlaybackPosition(delayMs)
     }, delayMs)
 
     fun handlePlayPauseButton() {
-        Util.handlePlayPauseButtonAction(controller)
-        _shouldShowPlayButton.value = Util.shouldShowPlayButton(controller)
+        Util.handlePlayPauseButtonAction(mediaController)
+        _shouldShowPlayButton.value = Util.shouldShowPlayButton(mediaController)
     }
 
-    fun releaseController() {
-        MediaController.releaseFuture(controllerFuture)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        releaseController()
-    }
 }
 
