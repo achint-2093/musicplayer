@@ -34,8 +34,8 @@ class PlayerViewmodel @Inject constructor(
     private val mediaControllerFuture: ListenableFuture<MediaController>
 ) : ViewModel() {
 
-    private var songId: Long? = null
-    private var playlistId: Long? = null
+    private var savedSongId: Long? = null
+    private var savedPlaylistId: Long? = null
 
     private val _currentSong = MutableStateFlow<Response<SongEntity>>(Response.Loading())
     val currentSong: StateFlow<Response<SongEntity>>
@@ -73,36 +73,32 @@ class PlayerViewmodel @Inject constructor(
             if (lastPlaylistId != null && lastSongId != null) {
                 fetchSongs(lastSongId, lastPlaylistId)
             }
+            listeners()
+            setUi()
         }
-        //fetchSongs(songId, playlistId)
-        listeners()
-        setUi()
     }
 
 
     fun fetchSongs(songId: Long, playlistId: Long) {
-        this.songId = songId
-        this.playlistId = playlistId
+        savedSongId = songId
+        savedPlaylistId = playlistId
         viewModelScope.launch {
             if (playlistId == Constants.PLAYLIST_ID_ALL) {
                 val songs = roomRepository.getAllSongs()
                 _playlist.value = songs
-                val song = songs.find { it.id == songId }
-                val songIndex = songs.indexOf(song)
-                currentSongIndex.value = songIndex
             } else {
                 val songs = roomRepository.getPlaylistSongs(playlistId)
                 _playlist.value = songs
-                val song = songs.find { it.id == songId }
-                val songIndex = songs.indexOf(song)
-                currentSongIndex.value = songIndex
             }
-
+            val song = playlist.value.find { it.id == songId }
+            val songIndex = playlist.value.indexOf(song)
+            currentSongIndex.value = songIndex
 
             val lastSongId = dataStoreRepository.getCurrentSong()
             val lastPlaylistId = dataStoreRepository.getCurrentPlaylist()
             mediaController?.let {
                 if (!it.isPlaying || lastSongId != songId || lastPlaylistId != playlistId) {
+                    Log.d("MYDEBUG", "different")
                     it.clearMediaItems()
                     setMediaItems()
                 } else {
@@ -136,10 +132,14 @@ class PlayerViewmodel @Inject constructor(
 
             override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
                 viewModelScope.launch {
-                    songId?.let {
-                        dataStoreRepository.saveCurrentSong(it)
+                    mediaItem?.let { mediaItem ->
+                        val songId = mediaItem.mediaId.toLong()
+                        savedSongId = songId
+                        val song = playlist.value.find { it.id == songId }
+                        val songIndex = playlist.value.indexOf(song)
+                        currentSongIndex.value = songIndex
+                        playCurrentSong()
                     }
-
                 }
             }
 
@@ -148,18 +148,14 @@ class PlayerViewmodel @Inject constructor(
 
     fun previousMediaItem() {
         if (currentSongIndex.value > 0) {
-            currentSongIndex.value -= 1
-            mediaController?.seekTo(currentSongIndex.value, 0)
-            _currentSong.value = Response.Success(playlist.value[currentSongIndex.value])
+            mediaController?.seekTo(currentSongIndex.value-1, 0)
         }
 
     }
 
     fun nextMediaItem() {
         if (currentSongIndex.value < playlist.value.size - 1) {
-            currentSongIndex.value += 1
-            mediaController?.seekTo(currentSongIndex.value, 0)
-            _currentSong.value = Response.Success(playlist.value[currentSongIndex.value])
+            mediaController?.seekTo(currentSongIndex.value+1, 0)
         }
     }
 
@@ -175,16 +171,17 @@ class PlayerViewmodel @Inject constructor(
 
         }
         mediaController?.seekTo(currentSongIndex.value, 0)
-        playCurrentSong()
     }
 
     private fun playCurrentSong() {
         _currentSong.value = Response.Success(playlist.value[currentSongIndex.value])
         viewModelScope.launch {
-            songId?.let {
+            savedSongId?.let {
+                Log.d("MYDEBUG", "songid$it")
                 dataStoreRepository.saveCurrentSong(it)
             }
-            playlistId?.let {
+            savedPlaylistId?.let {
+                Log.d("MYDEBUG", "pla $it")
                 dataStoreRepository.saveCurrentPlaylist(it)
             }
         }

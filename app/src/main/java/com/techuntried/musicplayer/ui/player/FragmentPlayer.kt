@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -42,56 +43,6 @@ class FragmentPlayer : Fragment() {
     ): View? {
 
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
-//        shortPlayback = arguments?.getBoolean("short")
-//        if (shortPlayback == true) {
-//            currentSongIndex =
-//                arguments?.getInt("currentSongIndex")
-//            playlistName = arguments?.getString("playlistName")
-//            playlistId = arguments?.getLong("playlistId")
-//        } else {
-//            songs = args.parcelSong?.songs
-//            currentSongIndex =
-//                args.parcelSong?.currentSongIndex
-//            playlistName = args.parcelSong?.playListName
-//            playlistId = args.parcelSong?.playlistId
-//        }
-
-
-//        if (playlistId == viewModel.currentMusic.value?.playlistId) {
-//            Toast.makeText(context, "same playlist", Toast.LENGTH_SHORT).show()
-//            if (viewModel.liveSongs.value?.get(currentSongIndex!!)?.songName != viewModel.currentMusic.value?.songName) {
-//                viewModel.goToIndex(currentSongIndex!!)
-//            }
-//        } else {
-//            Toast.makeText(context, "diff", Toast.LENGTH_SHORT).show()
-//            viewModel.updateSongs(songs!!)
-//            viewModel.updatePlaylistName(playlistName!!, playlistId!!)
-//            viewModel.initializeController(
-//                requireContext(),
-//                currentSongIndex!!
-//            )
-//        }
-
-//        var controllerIsPlaying = false
-//        binding.seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                if (fromUser)
-//                    controller?.seekTo(progress.toLong())
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-//                controllerIsPlaying = controller?.isPlaying ?: false
-//                controller?.pause()
-//            }
-//
-//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-//                if (controllerIsPlaying)
-//                    controller?.play()
-//                else
-//                    controller?.pause()
-//            }
-//
-//        })
 
         return binding.root
     }
@@ -102,42 +53,6 @@ class FragmentPlayer : Fragment() {
         observers()
         clickListeners()
     }
-
-//    fun initializeController() {
-//        val context = requireContext()
-//        val sessionToken = SessionToken(context, ComponentName(context, PlayerService::class.java))
-//        controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
-//        controllerFuture.addListener({
-//            controller = controllerFuture.get()
-//            checkPlaybackPosition(100)
-//            listeners()
-//        }, MoreExecutors.directExecutor())
-//
-//    }
-
-//    private fun listeners() {
-//        controller.addListener(object : Player.Listener {
-//
-//            override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-//            }
-//
-//        })
-//    }
-
-//    private fun setMediaItem(songEntity: SongEntity) {
-//        val mediaMetadata = MediaMetadata.Builder()
-//            .setTitle(songEntity.songName)
-//            .setArtist(songEntity.artist)
-//            .setArtworkUri(songEntity.uri.toUri())
-//            .build()
-//        val mediaItem = MediaItem.Builder()
-//            .setMediaMetadata(mediaMetadata)
-//            .setMediaId(songEntity.id.toString())
-//            .setUri(songEntity.uri)
-//            .build()
-//
-//        controller.setMediaItem(mediaItem)
-//    }
 
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
