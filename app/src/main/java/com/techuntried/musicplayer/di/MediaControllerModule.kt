@@ -25,9 +25,5 @@ class MediaControllerModule {
         return MediaController.Builder(context, sessionToken).buildAsync()
     }
 
-//    @Singleton
-//    @Provides
-//    fun providesMediaController(mediaControllerFuture: ListenableFuture<MediaController>): MediaController {
-//        return mediaControllerFuture.get()
-//    }
+
 }

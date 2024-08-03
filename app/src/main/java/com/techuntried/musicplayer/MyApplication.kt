@@ -20,7 +20,7 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        MediaControllerObject.initialize(mediaControllerFuture)
+       // MediaControllerObject.initialize(mediaControllerFuture)
         createNotificationChannel()
     }
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +25,7 @@ class FragmentPlayer : Fragment() {
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: PlayerViewmodel by viewModels()
+    private val viewModel: PlayerViewmodel by activityViewModels()
 
     //    private val handler = Handler(Looper.getMainLooper())
     private val args by navArgs<FragmentPlayerArgs>()
@@ -33,9 +34,6 @@ class FragmentPlayer : Fragment() {
     private var playlistName: String? = null
     private var playlistId: Long? = null
     private var shortPlayback: Boolean? = null
-
-//    private lateinit var controllerFuture: ListenableFuture<MediaController>
-//    private lateinit var controller: MediaController
 
 
     override fun onCreateView(
@@ -100,8 +98,7 @@ class FragmentPlayer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //initializeController()
-        viewModel.initializeController(requireContext())
+        viewModel.fetchSongs(args.songId,args.playlistId)
         observers()
         clickListeners()
     }
@@ -236,13 +233,6 @@ class FragmentPlayer : Fragment() {
     private fun clickListeners() {
         binding.playButton.setOnClickListener {
             viewModel.handlePlayPauseButton()
-//            Util.handlePlayPauseButtonAction(controller)
-//            val shouldShowPlayButton = Util.shouldShowPlayButton(controller)
-//            if (shouldShowPlayButton) {
-//                binding.playButton.setImageResource(R.drawable.play_icon)
-//            } else {
-//                binding.playButton.setImageResource(R.drawable.pause_icon)
-//            }
         }
         binding.skipNext.setOnClickListener {
             viewModel.nextMediaItem()
@@ -263,7 +253,6 @@ class FragmentPlayer : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        //releaseController()
         _binding = null
     }
 }
