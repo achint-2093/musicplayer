@@ -30,13 +30,13 @@ class SongViewModel @Inject constructor(
         fetchMusicFiles()
     }
 
-     fun refreshSongs() {
+    fun refreshSongs() {
         viewModelScope.launch {
-          //  _songs.value = Response.Loading()
-            songsRepository.refreshSongs()
-//            roomRepository.getAllSongs().collect {
-//                _songs.value = Response.Success(it)
-//            }
+            try {
+                songsRepository.refreshSongs()
+            } catch (e: Exception) {
+                _songs.value = Response.Error(e.message.toString())
+            }
         }
     }
 

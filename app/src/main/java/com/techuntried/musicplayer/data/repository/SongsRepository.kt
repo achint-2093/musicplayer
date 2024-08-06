@@ -17,7 +17,6 @@ class SongsRepository @Inject constructor(
     private val songsDao: SongsDao
 ) {
 
-
     suspend fun updateSongs() {
         val songs = fetchMusicFiles()
         insertSongs(songs)
@@ -31,14 +30,14 @@ class SongsRepository @Inject constructor(
         removeDeletedSongsFromDatabase(findDeletedSongs)
     }
 
-    suspend fun fetchMusicFiles(): List<SongEntity> {
+    private suspend fun fetchMusicFiles(): List<SongEntity> {
         return withContext(Dispatchers.IO) {
             val songs = mutableListOf<SongEntity>()
             val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
             val projection = arrayOf(
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ARTIST
+                MediaStore.Audio.Media.ARTIST,MediaStore.Audio.Media.ALBUM
             )
 
             val selection = "${MediaStore.Audio.Media.IS_MUSIC} != 0"
@@ -50,19 +49,25 @@ class SongsRepository @Inject constructor(
                 val idColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
                 val titleColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
                 val artistColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
-                /*  val albumColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
-              val durationColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
-              val dataColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)*/
+                val albumColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
+                /*  val durationColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+                 val dataColumn = c.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)*/
 
                 while (c.moveToNext()) {
                     val id = c.getLong(idColumn)
                     val title = c.getString(titleColumn)
                     val artist = c.getString(artistColumn)
-                    /* val album = c.getString(albumColumn)
-                 val duration = c.getLong(durationColumn)
-                 val data = c.getString(dataColumn)*/
+                    val album = c.getString(albumColumn)
+                    /*  val duration = c.getLong(durationColumn)
+                    val data = c.getString(dataColumn)*/
                     val selectedAudioUri = ContentUris.withAppendedId(uri, id).toString()
-                    val song = SongEntity(id, title, artist, selectedAudioUri)
+                    val song = SongEntity(
+                        id = id,
+                        songName = title,
+                        artist = artist,
+                        album = album,
+                        uri = selectedAudioUri
+                    )
                     songs.add(song)
                 }
             }
@@ -70,7 +75,7 @@ class SongsRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchSongsFromDatabase(): List<SongEntity> {
+    private suspend fun fetchSongsFromDatabase(): List<SongEntity> {
         return withContext(Dispatchers.IO) {
             songsDao.getAllSongs()
         }

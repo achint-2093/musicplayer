@@ -9,14 +9,7 @@
         android:id="@+id/fragmentHome"
         android:name="com.techuntried.musicplayer.ui.home.FragmentHome"
         android:label="FragmentHome"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_fragmentHome_to_fragmentSong"
-            app:destination="@id/fragmentSong" />
-        <action
-            android:id="@+id/action_fragmentHome_to_fragmentPlaylists"
-            app:destination="@id/fragmentPlaylists" />
-    </fragment>
+        tools:layout="@layout/fragment_home"/>
     <fragment
         android:id="@+id/fragmentSong"
         android:name="com.techuntried.musicplayer.ui.songs.FragmentSong"
