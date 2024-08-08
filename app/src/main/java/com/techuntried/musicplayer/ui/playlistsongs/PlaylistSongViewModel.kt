@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.data.repository.RoomRepository
+import com.techuntried.musicplayer.utils.FilterType
 import com.techuntried.musicplayer.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

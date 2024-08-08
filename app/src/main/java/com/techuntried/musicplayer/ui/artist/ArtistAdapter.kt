@@ -31,7 +31,7 @@ class ArtistAdapter(
         ) {
             binding.artist = item
             binding.root.setOnClickListener {
-                clickListener.onClick()
+                clickListener.onClick(item)
             }
 
 
@@ -50,7 +50,7 @@ class ArtistAdapter(
 }
 
 interface ArtistClickListener {
-    fun onClick()
+    fun onClick(artist:ArtistModel)
 }
 
 class ArtistDiffUtilCallBack : DiffUtil.ItemCallback<ArtistModel>() {

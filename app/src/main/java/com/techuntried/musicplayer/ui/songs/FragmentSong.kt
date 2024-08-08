@@ -106,7 +106,7 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
                 //   Toast.makeText(context, songEntity.album, Toast.LENGTH_SHORT).show()
                 val action =
                     FragmentHomeDirections.actionFragmentHomeToFragmentPlayer(
-                        songId = songEntity.id, playlistId = Constants.PLAYLIST_ID_ALL
+                        songId = songEntity.id, playlistId = Constants.PLAYLIST_ID_ALL, filterData = ""
                     )
                 view?.findNavController()?.navigate(action)
             }

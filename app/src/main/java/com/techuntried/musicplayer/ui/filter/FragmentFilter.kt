@@ -1,4 +1,4 @@
-package com.techuntried.musicplayer.ui.album
+package com.techuntried.musicplayer.ui.filter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,11 +10,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.techuntried.musicplayer.data.models.AlbumModel
-import com.techuntried.musicplayer.databinding.FragmentAlbumBinding
-import com.techuntried.musicplayer.ui.artist.AlbumViewmodel
-import com.techuntried.musicplayer.ui.home.FragmentHomeDirections
+import com.techuntried.musicplayer.data.models.SongEntity
+import com.techuntried.musicplayer.databinding.FragmentFilterBinding
+import com.techuntried.musicplayer.ui.songs.SongsAdapter
+import com.techuntried.musicplayer.ui.songs.SongsClickListener
+import com.techuntried.musicplayer.utils.Constants
 import com.techuntried.musicplayer.utils.FilterType
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.showSnackBar
@@ -22,18 +24,19 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FragmentAlbum : Fragment() {
+class FragmentFilter : Fragment() {
 
-    private var _binding: FragmentAlbumBinding? = null
+    private var _binding: FragmentFilterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AlbumViewmodel by viewModels()
-    private lateinit var adapter: AlbumAdapter
+    private val viewModel: FilterViewModel by viewModels()
+    private lateinit var adapter: SongsAdapter
+    private val args by navArgs<FragmentFilterArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAlbumBinding.inflate(inflater, container, false)
+        _binding = FragmentFilterBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -41,36 +44,43 @@ class FragmentAlbum : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
-        setArtistAdapter()
-        observers()
+        setFilterAdapter()
+        setObservers()
     }
 
-    private fun setArtistAdapter() {
-        adapter = AlbumAdapter(object : AlbumClickListener {
-            override fun onClick(album: AlbumModel) {
-                val action =
-                    FragmentHomeDirections.actionFragmentHomeToFragmentFilter(
-                        FilterType.Album, album.albumName
-                    )
+    private fun setFilterAdapter() {
+        adapter = SongsAdapter(object : SongsClickListener {
+            override fun onClick(songEntity: SongEntity) {
+                val filter = args.filter
+                val playlistId =
+                    if (filter == FilterType.Album) Constants.PLAYLIST_ID_ALBUM else Constants.PLAYLIST_ID_ARTIST
+                val action = FragmentFilterDirections.actionFragmentFilterToFragmentPlayer(
+                    songId = songEntity.id,
+                    playlistId=playlistId,
+                    filterData = args.filterData
+                )
                 findNavController().navigate(action)
             }
 
+            override fun onMoreClick(songEntity: SongEntity) {
+            }
+
         })
-        binding.albumsRecyclerView.adapter = adapter
-        binding.albumsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.filterRecyclerView.adapter = adapter
+        binding.filterRecyclerView.layoutManager = LinearLayoutManager(context)
 
     }
 
-    private fun observers() {
+    private fun setObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.albums.collect { artists ->
-                    when (artists) {
+                viewModel.filteredSongs.collect { filteredSongs ->
+                    when (filteredSongs) {
                         is Response.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            val data = artists.data ?: emptyList()
+                            val data = filteredSongs.data ?: emptyList()
                             if (data.isNotEmpty()) {
-                                binding.albumsRecyclerView.visibility = View.VISIBLE
+                                binding.filterRecyclerView.visibility = View.VISIBLE
                                 adapter.submitList(data)
 
                             } else {
@@ -80,13 +90,13 @@ class FragmentAlbum : Fragment() {
                         }
 
                         is Response.Error -> {
-                            binding.albumsRecyclerView.visibility = View.GONE
+                            binding.filterRecyclerView.visibility = View.GONE
                             binding.progressBar.visibility = View.GONE
-                            showSnackBar(binding.root, artists.errorMessage.toString())
+                            showSnackBar(binding.root, filteredSongs.errorMessage.toString())
                         }
 
                         is Response.Loading -> {
-                            binding.albumsRecyclerView.visibility = View.GONE
+                            binding.filterRecyclerView.visibility = View.GONE
                             binding.progressBar.visibility = View.VISIBLE
                         }
                     }

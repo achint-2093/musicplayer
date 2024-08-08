@@ -47,6 +47,12 @@ class DataStoreRepository @Inject constructor(
         }
     }
 
+    suspend fun saveCurrentFilterData(filterData: String) {
+        dataStore.edit { preferences ->
+            preferences[PreferenceKey.KEY_CURRENT_FILTER_DATA] = filterData
+        }
+    }
+
     suspend fun getCurrentSong(): Long? {
         return try {
             val preferences = dataStore.data.first()
@@ -65,6 +71,20 @@ class DataStoreRepository @Inject constructor(
         return try {
             val preferences = dataStore.data.first()
             val playlistId = preferences[PreferenceKey.KEY_CURRENT_PLAYLIST]
+            playlistId
+        } catch (e: IOException) {
+            Log.e("getAppTheme", "Error reading preferences", e)
+            null
+        } catch (e: Exception) {
+            Log.e("getAppTheme", "Unexpected error", e)
+            null
+        }
+    }
+
+    suspend fun getCurrentFilterData(): String? {
+        return try {
+            val preferences = dataStore.data.first()
+            val playlistId = preferences[PreferenceKey.KEY_CURRENT_FILTER_DATA]
             playlistId
         } catch (e: IOException) {
             Log.e("getAppTheme", "Error reading preferences", e)

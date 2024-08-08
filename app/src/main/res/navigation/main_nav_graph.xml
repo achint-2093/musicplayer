@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_fragmentHome_to_fragmentPlayer"
             app:destination="@id/fragmentPlayer" />
+        <action
+            android:id="@+id/action_fragmentHome_to_fragmentFilter"
+            app:destination="@id/fragmentFilter" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSong"
@@ -70,5 +73,23 @@
         <argument
             android:name="playlistId"
             app:argType="long" />
+        <argument
+            android:name="filterData"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentFilter"
+        android:name="com.techuntried.musicplayer.ui.filter.FragmentFilter"
+        android:label="FragmentFilter"
+        tools:layout="@layout/fragment_filter">
+        <argument
+            android:name="filter"
+            app:argType="com.techuntried.musicplayer.utils.FilterType" />
+        <argument
+            android:name="filterData"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fragmentFilter_to_fragmentPlayer"
+            app:destination="@id/fragmentPlayer" />
     </fragment>
 </navigation>

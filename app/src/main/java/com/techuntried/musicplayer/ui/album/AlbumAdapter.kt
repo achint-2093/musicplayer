@@ -31,7 +31,7 @@ class AlbumAdapter(
         ) {
             binding.album = item
             binding.root.setOnClickListener {
-                clickListener.onClick()
+                clickListener.onClick(item)
             }
 
 
@@ -50,7 +50,7 @@ class AlbumAdapter(
 }
 
 interface AlbumClickListener {
-    fun onClick()
+    fun onClick(album: AlbumModel)
 }
 
 class AlbumDiffUtilCallBack : DiffUtil.ItemCallback<AlbumModel>() {

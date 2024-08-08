@@ -70,6 +70,26 @@ class RoomRepository @Inject constructor(
         return playlistSongsDao.getSongsForPlaylistFlow(playlistId).flowOn(Dispatchers.IO)
     }
 
+    fun getArtistSongsFlow(artistName: String): Flow<List<SongEntity>> {
+        return songsDao.getArtistSongsFlow(artistName).flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getArtistSongs(artistName: String): List<SongEntity> {
+        return withContext(Dispatchers.IO) {
+            songsDao.getArtistSongs(artistName)
+        }
+    }
+
+    fun getAlbumSongsFlow(albumName: String): Flow<List<SongEntity>> {
+        return songsDao.getAlbumSongsFlow(albumName).flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getAlbumSongs(albumName: String): List<SongEntity> {
+        return withContext(Dispatchers.IO) {
+            songsDao.getAlbumSongs(albumName)
+        }
+    }
+
     suspend fun getPlaylistSongs(playlistId: Long): List<SongEntity> {
         return withContext(Dispatchers.IO) {
             playlistSongsDao.getSongsForPlaylist(playlistId)

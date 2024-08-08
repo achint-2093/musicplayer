@@ -27,15 +27,7 @@ class FragmentPlayer : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private val viewModel: PlayerViewmodel by activityViewModels()
-
-    //    private val handler = Handler(Looper.getMainLooper())
     private val args by navArgs<FragmentPlayerArgs>()
-    private var songs: List<SongEntity>? = null
-    private var currentSongIndex: Int? = null
-    private var playlistName: String? = null
-    private var playlistId: Long? = null
-    private var shortPlayback: Boolean? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +41,7 @@ class FragmentPlayer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchSongs(args.songId,args.playlistId)
+        viewModel.fetchSongs(args.songId,args.playlistId,args.filterData)
         observers()
         clickListeners()
     }

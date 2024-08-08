@@ -28,6 +28,10 @@ enum class PlaylistOptions {
     Share, Delete,Edit
 }
 
+enum class FilterType{
+    Artist,Album
+}
+
 fun PlaylistType.title(): String {
     return when (this) {
         PlaylistType.Add -> "Add to Playlist"

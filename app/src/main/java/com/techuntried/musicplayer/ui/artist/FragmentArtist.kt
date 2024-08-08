@@ -9,8 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.techuntried.musicplayer.data.models.ArtistModel
 import com.techuntried.musicplayer.databinding.FragmentArtistBinding
+import com.techuntried.musicplayer.ui.home.FragmentHomeDirections
+import com.techuntried.musicplayer.utils.FilterType
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +46,12 @@ class FragmentArtist : Fragment() {
 
     private fun setArtistAdapter() {
         adapter = ArtistAdapter(object : ArtistClickListener {
-            override fun onClick() {
+            override fun onClick(artist: ArtistModel) {
+                val action =
+                    FragmentHomeDirections.actionFragmentHomeToFragmentFilter(
+                        FilterType.Artist, artist.artistName
+                    )
+                findNavController().navigate(action)
             }
 
         })

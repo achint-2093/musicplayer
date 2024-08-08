@@ -126,7 +126,7 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
             override fun onClick(songEntity: SongEntity) {
                 val action =
                     FragmentPlaylistSongsDirections.actionFragmentPlaylistSongsToFragmentPlayer(
-                        songEntity.id, args.playlistId
+                        songEntity.id, args.playlistId,""
                     )
                 findNavController().navigate(action)
             }

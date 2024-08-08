@@ -27,6 +27,18 @@ interface SongsDao {
     @Query("SELECT * FROM songs")
     fun getAllSongs(): List<SongEntity>
 
+    @Query("SELECT * FROM songs where artist=:artistName")
+    suspend fun getArtistSongs(artistName: String): List<SongEntity>
+
+    @Query("SELECT * FROM songs where artist=:artistName")
+    fun getArtistSongsFlow(artistName: String): Flow<List<SongEntity>>
+
+    @Query("SELECT * FROM songs where album=:albumName")
+    suspend fun getAlbumSongs(albumName: String): List<SongEntity>
+
+    @Query("SELECT * FROM songs where album=:albumName")
+    fun getAlbumSongsFlow(albumName: String): Flow<List<SongEntity>>
+
     @Query("SELECT * FROM songs WHERE id=:songId")
     fun getSongById(songId: Long): SongEntity
 
@@ -34,10 +46,10 @@ interface SongsDao {
     suspend fun deleteSongs(songEntity: List<SongEntity>)
 
     @Query("SELECT DISTINCT artist FROM songs")
-     fun getArtists(): Flow<List<String>>
+    fun getArtists(): Flow<List<String>>
 
-     @Query("SELECT DISTINCT album FROM songs")
-     fun getAlbums(): Flow<List<String>>
+    @Query("SELECT DISTINCT album FROM songs")
+    fun getAlbums(): Flow<List<String>>
 
 }
 
@@ -55,7 +67,6 @@ interface PlaylistsDao {
 
     @Query("SELECT * FROM playlists WHERE playListName LIKE '%' || :searchQuery || '%'")
     fun getPlaylistFlow(searchQuery: String): Flow<List<PlaylistEntity>>
-
 
     @Query("SELECT * FROM playlists")
     fun getPlaylists(): Flow<List<PlaylistEntity>>
