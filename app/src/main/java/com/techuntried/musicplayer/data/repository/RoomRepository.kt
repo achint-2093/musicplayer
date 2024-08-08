@@ -20,6 +20,14 @@ class RoomRepository @Inject constructor(
     private val playlistSongsDao: PlaylistSongsDao
 ) {
 
+    fun getAlbums(): Flow<List<String>> {
+        return songsDao.getAlbums().flowOn(Dispatchers.IO)
+    }
+
+    fun getArtists(): Flow<List<String>> {
+        return songsDao.getArtists().flowOn(Dispatchers.IO)
+    }
+
     fun getSongs(): Flow<List<SongEntity>> {
         return songsDao.getSongs().flowOn(Dispatchers.IO)
     }

@@ -4,19 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentSongsBinding
 import com.techuntried.musicplayer.ui.bottomsheets.SongOptionsSheet
+import com.techuntried.musicplayer.ui.home.FragmentHomeDirections
 import com.techuntried.musicplayer.utils.Constants
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.SongOptions
@@ -59,17 +57,7 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     }
 
     private fun setUi() {
-        binding.toolbar.inflateMenu(R.menu.songs_menu)
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.refresh_songs_action -> {
-                    viewModel.refreshSongs()
-                    true
-                }
 
-                else -> false
-            }
-        }
     }
 
     private fun setOnClickListener() {
@@ -115,9 +103,9 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
         adapter = SongsAdapter(object : SongsClickListener {
 
             override fun onClick(songEntity: SongEntity) {
-             //   Toast.makeText(context, songEntity.album, Toast.LENGTH_SHORT).show()
+                //   Toast.makeText(context, songEntity.album, Toast.LENGTH_SHORT).show()
                 val action =
-                    FragmentSongDirections.actionFragmentSongToFragmentPlayer(
+                    FragmentHomeDirections.actionFragmentHomeToFragmentPlayer(
                         songId = songEntity.id, playlistId = Constants.PLAYLIST_ID_ALL
                     )
                 view?.findNavController()?.navigate(action)

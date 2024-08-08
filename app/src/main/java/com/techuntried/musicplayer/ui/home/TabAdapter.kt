@@ -4,6 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.techuntried.musicplayer.ui.album.FragmentAlbum
+import com.techuntried.musicplayer.ui.artist.FragmentArtist
 import com.techuntried.musicplayer.ui.playlists.FragmentPlaylists
 import com.techuntried.musicplayer.ui.songs.FragmentSong
 
@@ -14,7 +16,7 @@ class TabAdapter(
 
     private val fragments =
         listOf(FragmentSong(), FragmentPlaylists(), FragmentPlaylists(), FragmentPlaylists())
-    private val titles = listOf("Songs", "Playlists", "Playlists", "Playlists")
+    private val titles = listOf("Songs", "Playlists", "Albums", "Artists")
 
     override fun getItemCount() = fragments.size
 
@@ -22,8 +24,8 @@ class TabAdapter(
         return when (position) {
             0 -> FragmentSong()
             1 -> FragmentPlaylists()
-            2 -> FragmentPlaylists()
-            3 -> FragmentPlaylists()
+            2 -> FragmentAlbum()
+            3 -> FragmentArtist()
             else -> throw IllegalArgumentException("Invalid position")
         }
     }

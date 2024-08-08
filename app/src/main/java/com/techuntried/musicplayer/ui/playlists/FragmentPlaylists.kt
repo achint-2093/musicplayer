@@ -62,24 +62,24 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
     }
 
     private fun setMenuProvider() {
-        binding.toolbar.inflateMenu(R.menu.playlist_menu)
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.search_playlists_action -> {
-
-                    true
-                }
-
-                R.id.add_playlists_action -> {
-                    val playlistSheet = AddPlaylistSheet.newInstance(null, PlaylistType.Add)
-                    playlistSheet.setBottomSheetCallback(addPlaylistSheetCallback)
-                    playlistSheet.show(parentFragmentManager, "AddPlaylistSheet")
-                    true
-                }
-
-                else -> false
-            }
-        }
+//        binding.toolbar.inflateMenu(R.menu.playlist_menu)
+//        binding.toolbar.setOnMenuItemClickListener {
+//            when (it.itemId) {
+//                R.id.search_playlists_action -> {
+//
+//                    true
+//                }
+//
+//                R.id.add_playlists_action -> {
+//                    val playlistSheet = AddPlaylistSheet.newInstance(null, PlaylistType.Add)
+//                    playlistSheet.setBottomSheetCallback(addPlaylistSheetCallback)
+//                    playlistSheet.show(parentFragmentManager, "AddPlaylistSheet")
+//                    true
+//                }
+//
+//                else -> false
+//            }
+//        }
     }
 
 

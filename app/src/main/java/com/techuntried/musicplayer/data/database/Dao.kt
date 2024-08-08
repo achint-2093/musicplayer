@@ -33,6 +33,12 @@ interface SongsDao {
     @Delete
     suspend fun deleteSongs(songEntity: List<SongEntity>)
 
+    @Query("SELECT DISTINCT artist FROM songs")
+     fun getArtists(): Flow<List<String>>
+
+     @Query("SELECT DISTINCT album FROM songs")
+     fun getAlbums(): Flow<List<String>>
+
 }
 
 @Dao
