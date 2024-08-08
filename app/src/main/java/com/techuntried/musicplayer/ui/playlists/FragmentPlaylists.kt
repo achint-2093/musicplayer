@@ -16,6 +16,7 @@ import com.techuntried.musicplayer.data.models.PlaylistEntity
 import com.techuntried.musicplayer.databinding.FragmentPlaylistsBinding
 import com.techuntried.musicplayer.ui.bottomsheets.AddPlaylistSheet
 import com.techuntried.musicplayer.ui.bottomsheets.PlaylistOptionSheet
+import com.techuntried.musicplayer.ui.home.FragmentHomeDirections
 import com.techuntried.musicplayer.utils.CustomAlertDialog
 import com.techuntried.musicplayer.utils.PlaylistOptions
 import com.techuntried.musicplayer.utils.PlaylistType
@@ -58,10 +59,15 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
         setPlaylistAdapter()
         setClickListeners()
         observers()
-        setMenuProvider()
+        setOnClickListeners()
     }
 
-    private fun setMenuProvider() {
+    private fun setOnClickListeners() {
+        binding.addPlaylistButton.setOnClickListener {
+            val playlistSheet = AddPlaylistSheet.newInstance(null, PlaylistType.Add)
+            playlistSheet.setBottomSheetCallback(addPlaylistSheetCallback)
+            playlistSheet.show(parentFragmentManager, "AddPlaylistSheet")
+        }
 //        binding.toolbar.inflateMenu(R.menu.playlist_menu)
 //        binding.toolbar.setOnMenuItemClickListener {
 //            when (it.itemId) {
@@ -150,7 +156,7 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
         adapter = PlaylistsAdapter(object : PlaylistClickListener {
             override fun onClick(playlist: PlaylistEntity) {
                 val action =
-                    FragmentPlaylistsDirections.actionFragmentPlaylistsToFragmentPlaylistSongs(
+                    FragmentHomeDirections.actionFragmentHomeToFragmentPlaylistSongs(
                         playlist.id, playlist.playListName
                     )
                 findNavController().navigate(action)

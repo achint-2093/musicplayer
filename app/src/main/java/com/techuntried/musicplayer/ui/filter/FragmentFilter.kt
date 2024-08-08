@@ -43,9 +43,14 @@ class FragmentFilter : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnClickListeners()
+        setUi()
         setFilterAdapter()
         setObservers()
+        setOnClickListeners()
+    }
+
+    private fun setUi() {
+        binding.toolbar.title = args.filterData
     }
 
     private fun setFilterAdapter() {
@@ -56,7 +61,7 @@ class FragmentFilter : Fragment() {
                     if (filter == FilterType.Album) Constants.PLAYLIST_ID_ALBUM else Constants.PLAYLIST_ID_ARTIST
                 val action = FragmentFilterDirections.actionFragmentFilterToFragmentPlayer(
                     songId = songEntity.id,
-                    playlistId=playlistId,
+                    playlistId = playlistId,
                     filterData = args.filterData
                 )
                 findNavController().navigate(action)
@@ -106,6 +111,9 @@ class FragmentFilter : Fragment() {
     }
 
     private fun setOnClickListeners() {
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     override fun onDestroyView() {

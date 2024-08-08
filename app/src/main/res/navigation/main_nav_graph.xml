@@ -16,25 +16,20 @@
         <action
             android:id="@+id/action_fragmentHome_to_fragmentFilter"
             app:destination="@id/fragmentFilter" />
+        <action
+            android:id="@+id/action_fragmentHome_to_fragmentPlaylistSongs"
+            app:destination="@id/fragmentPlaylistSongs" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSong"
         android:name="com.techuntried.musicplayer.ui.songs.FragmentSong"
         android:label="FragmentSong"
-        tools:layout="@layout/fragment_songs" >
-        <action
-            android:id="@+id/action_fragmentSong_to_fragmentPlayer"
-            app:destination="@id/fragmentPlayer" />
-    </fragment>
+        tools:layout="@layout/fragment_songs" />
     <fragment
         android:id="@+id/fragmentPlaylists"
         android:name="com.techuntried.musicplayer.ui.playlists.FragmentPlaylists"
         android:label="FragmentPlaylists"
-        tools:layout="@layout/fragment_playlists">
-        <action
-            android:id="@+id/action_fragmentPlaylists_to_fragmentPlaylistSongs"
-            app:destination="@id/fragmentPlaylistSongs" />
-    </fragment>
+        tools:layout="@layout/fragment_playlists"/>
     <fragment
         android:id="@+id/fragmentPlaylistSongs"
         android:name="com.techuntried.musicplayer.ui.playlistsongs.FragmentPlaylistSongs"

@@ -12,6 +12,20 @@
         android:layout_height="match_parent"
         tools:context=".ui.filter.FragmentFilter">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/background"
+            android:theme="@style/MyToolbarStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/app_name"
+            app:navigationIcon="@drawable/back_icon"
+            app:titleTextAppearance="@style/BoldTitleText"
+             />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/filter_recyclerView"
             android:layout_width="0dp"
@@ -19,7 +33,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <ProgressBar
             android:id="@+id/progressBar"
