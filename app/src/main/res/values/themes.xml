@@ -75,5 +75,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
     </style>
+
+    <style name="player_rounded_image" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
     <!--round image view-->
 </resources>

@@ -10,7 +10,6 @@ import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.OptionUi
 import com.techuntried.musicplayer.databinding.PlaylistOptionSheetBinding
 import com.techuntried.musicplayer.utils.PlaylistOptions
-import com.techuntried.musicplayer.utils.SongOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,12 +17,15 @@ class PlaylistOptionSheet : BottomSheetDialogFragment() {
 
     companion object {
         private const val ARG_PLAYLIST_NAME = "playlist_name"
+        private const val ARG_PLAYLIST_SONGS = "playlist_songs"
 
         fun newInstance(
             playlistName: String,
+            songsCount: Int
         ): PlaylistOptionSheet {
             val args = Bundle().apply {
                 putString(ARG_PLAYLIST_NAME, playlistName)
+                putInt(ARG_PLAYLIST_SONGS, songsCount)
             }
             return PlaylistOptionSheet().apply {
                 arguments = args
@@ -44,10 +46,6 @@ class PlaylistOptionSheet : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         _binding = PlaylistOptionSheetBinding.inflate(inflater, container, false)
 
-//        song = arguments?.getParcelable(ARG_SONG)
-//        binding.displayName.text = song?.songName
-
-
         return binding.root
     }
 
@@ -59,7 +57,9 @@ class PlaylistOptionSheet : BottomSheetDialogFragment() {
 
     private fun setUi() {
         val playlistName = arguments?.getString(ARG_PLAYLIST_NAME)
-        binding.displayName.text = playlistName
+        val songsCount = arguments?.getInt(ARG_PLAYLIST_SONGS)
+        binding.playlistName.text = playlistName
+        binding.songsCount.text = "songs $songsCount"
         binding.shareSong.songOption = OptionUi("Share song", R.drawable.share_icon)
         binding.deletePlaylist.songOption = OptionUi("Delete Playlist", R.drawable.delete_icon)
         binding.editPlaylist.songOption = OptionUi("Edit Playlist", R.drawable.edit_icon)

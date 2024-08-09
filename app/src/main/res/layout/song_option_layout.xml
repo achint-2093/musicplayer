@@ -11,12 +11,11 @@
     </data>
 
     <RelativeLayout
-        android:id="@+id/editButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="12dp">
 
 
         <TextView
@@ -28,18 +27,21 @@
             android:layout_toEndOf="@+id/optionImage"
             android:text="@{songOption.optionName}"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/text_title"
+            android:textSize="@dimen/text_subtitle"
             tools:text="option Title" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/optionImage"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentStart="true"
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
-            android:padding="4dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/box_background"
+            app:contentPadding="8dp"
             app:imageResource="@{songOption.optionIcon}"
+            app:shapeAppearance="@style/roundedImageView"
             tools:src="@drawable/add_icon" />
 
     </RelativeLayout>

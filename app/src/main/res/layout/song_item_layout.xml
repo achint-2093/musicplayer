@@ -21,25 +21,25 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@color/box_background"
-            tools:src="@drawable/music_icon"
-            app:songCover="@{song.albumId}"
             app:contentPadding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/roundedImageView" />
+            app:shapeAppearance="@style/roundedImageView"
+            app:songCover="@{song.albumId}"
+            tools:src="@drawable/music_icon" />
 
-<!--        <com.airbnb.lottie.LottieAnimationView-->
-<!--            android:id="@+id/animationView"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:background="@color/box_background"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:lottie_autoPlay="true"-->
-<!--            app:lottie_loop="true"-->
-<!--            app:lottie_rawRes="@raw/play_animation" />-->
+        <!--        <com.airbnb.lottie.LottieAnimationView-->
+        <!--            android:id="@+id/animationView"-->
+        <!--            android:layout_width="48dp"-->
+        <!--            android:layout_height="48dp"-->
+        <!--            android:background="@color/box_background"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:lottie_autoPlay="true"-->
+        <!--            app:lottie_loop="true"-->
+        <!--            app:lottie_rawRes="@raw/play_animation" />-->
 
 
         <TextView
@@ -75,9 +75,10 @@
 
         <ImageView
             android:id="@+id/moreButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="10dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="6dp"
             android:src="@drawable/more_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

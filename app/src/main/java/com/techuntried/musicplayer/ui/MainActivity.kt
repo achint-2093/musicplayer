@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.techuntried.musicplayer.R
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                                 val currentDestination = navController.currentDestination
                                 if (currentDestination?.id != R.id.fragmentPlayer) {
                                     binding.miniPlayback.visibility = View.VISIBLE
-                                    setSongCover(binding.musicImageView,it.albumId)
+                                    setSongCover(binding.musicImageView, it.albumId)
                                 } else {
                                     binding.miniPlayback.visibility = View.GONE
                                 }
@@ -124,7 +125,14 @@ class MainActivity : AppCompatActivity() {
             viewModel.handlePlayPauseButton()
         }
         binding.miniPlayback.setOnClickListener {
-            navController.navigate(R.id.fragmentPlayer)
+            val navOptions = NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_in_bottom)
+                .setExitAnim(R.anim.slide_out_top)
+                .setPopEnterAnim(R.anim.slide_in_top)
+                .setPopExitAnim(R.anim.slide_out_bottom)
+                .build()
+
+            navController.navigate(R.id.fragmentPlayer, null, navOptions)
         }
     }
 }

@@ -35,7 +35,8 @@ class SongPickerViewModel @Inject constructor(
                 SongPickerModel(
                     songId = it.id,
                     name = it.songName,
-                    artistName = it.artist
+                    artistName = it.artist,
+                    albumId=it.albumId
                 )
             }
 

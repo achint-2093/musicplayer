@@ -18,12 +18,14 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:padding="4dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/playlistImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:padding="4dp"
-            android:src="@drawable/playlist_icon"
+            app:contentPadding="8dp"
+            app:shapeAppearance="@style/roundedImageView"
+            android:background="@color/box_background"
+            android:src="@drawable/music_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +38,7 @@
             android:layout_marginEnd="8dp"
             android:text="@{playList.playListName}"
             android:textColor="@color/text_color"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_subtitle"
             app:layout_constraintBottom_toTopOf="@+id/playlistSongsCount"
             app:layout_constraintEnd_toStartOf="@+id/moreButton"
             app:layout_constraintStart_toEndOf="@id/playlistImage"
@@ -59,11 +61,11 @@
 
         <ImageView
             android:id="@+id/moreButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_margin="8dp"
             android:background="?selectableItemBackgroundBorderless"
-            android:padding="8dp"
+            android:padding="6dp"
             android:src="@drawable/more_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

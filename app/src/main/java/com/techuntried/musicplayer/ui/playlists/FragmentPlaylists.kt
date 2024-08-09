@@ -104,7 +104,7 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
                             data?.let {
                                 binding.emptyLayout.visibility = View.GONE
                                 binding.playListRecyclerView.visibility = View.VISIBLE
-                                binding.playlistsText.text = "Playlists ${data.size}"
+                                binding.playlistsText.text = "${it.size} Playlists "
                                 adapter.submitList(data)
                             } ?: kotlin.run {
                                 binding.playListRecyclerView.visibility = View.GONE
@@ -169,7 +169,10 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
 
             override fun onMoreClick(playlist: PlaylistEntity) {
                 selectedPlaylist = playlist
-                val playlistOptionsSheet = PlaylistOptionSheet.newInstance(playlist.playListName)
+                val playlistOptionsSheet = PlaylistOptionSheet.newInstance(
+                    playlistName = playlist.playListName,
+                    songsCount = 2
+                )
                 playlistOptionsSheet.setBottomSheetCallback(playlistOptionsSheetCallback)
                 playlistOptionsSheet.show(parentFragmentManager, "PlaylistOptionSheet")
             }

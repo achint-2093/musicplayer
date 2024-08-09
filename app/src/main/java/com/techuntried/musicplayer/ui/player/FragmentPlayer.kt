@@ -4,19 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.fragment.findNavController
 import com.techuntried.musicplayer.R
-import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentPlayerBinding
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.formatDuration
+import com.techuntried.musicplayer.utils.setSongCover
 import com.techuntried.musicplayer.utils.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,7 +39,7 @@ class FragmentPlayer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       // viewModel.fetchSongs(args.songId,args.playlistId,args.filterData)
+        // viewModel.fetchSongs(args.songId,args.playlistId,args.filterData)
         observers()
         clickListeners()
     }
@@ -56,8 +54,9 @@ class FragmentPlayer : Fragment() {
                             data?.let {
 //                                setMediaItem(data)
                                 binding.playerLayout.visibility = View.VISIBLE
-                                binding.MusicName.text = data.songName
-                                binding.ArtistName.text = data.artist
+                                binding.MusicName.text = it.songName
+                                binding.ArtistName.text = it.artist
+                                setSongCover(binding.musicImage, it.albumId)
                             }
                         }
 
@@ -87,7 +86,7 @@ class FragmentPlayer : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.duration.collect {
-                    binding.seekbar.max=it.toInt()
+                    binding.seekbar.max = it.toInt()
                     binding.duration.text = it.formatDuration()
                 }
             }
@@ -95,7 +94,7 @@ class FragmentPlayer : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentPosition.collect {
-                    binding.seekbar.progress=it.toInt()
+                    binding.seekbar.progress = it.toInt()
                     binding.currentPosition.text = it.formatDuration()
                 }
             }
@@ -154,6 +153,14 @@ class FragmentPlayer : Fragment() {
 //        binding.repeatButton.setOnClickListener {
 //            viewModel.toggleRepeat()
 //        }
+
+        binding.favouriteIcon.setOnClickListener {
+            viewModel.addToFavorites()
+        }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
 
     }
 

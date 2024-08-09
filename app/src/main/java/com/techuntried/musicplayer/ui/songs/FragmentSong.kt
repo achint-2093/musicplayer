@@ -127,7 +127,7 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
             override fun onMoreClick(songEntity: SongEntity) {
                 selectedSong = songEntity
                 val songsBottomSheet =
-                    SongOptionsSheet.newInstance(songEntity.songName, Constants.PLAYLIST_ID_ALL)
+                    SongOptionsSheet.newInstance(songEntity, Constants.PLAYLIST_ID_ALL)
                 songsBottomSheet.setBottomSheetCallback(songSheetCallback)
                 songsBottomSheet.show(parentFragmentManager, "songsBottomSheet")
 

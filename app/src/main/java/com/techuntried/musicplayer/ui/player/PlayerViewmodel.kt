@@ -14,6 +14,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.Util
 import androidx.media3.session.MediaController
 import com.google.common.util.concurrent.ListenableFuture
+import com.techuntried.musicplayer.data.models.PlaylistEntity
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.data.repository.DataStoreRepository
 import com.techuntried.musicplayer.data.repository.RoomRepository
@@ -212,6 +213,24 @@ class PlayerViewmodel @Inject constructor(
     fun handlePlayPauseButton() {
         Util.handlePlayPauseButtonAction(mediaController)
         _shouldShowPlayButton.value = Util.shouldShowPlayButton(mediaController)
+    }
+
+    fun addToFavorites() {
+        viewModelScope.launch {
+            roomRepository.insertPlaylist(
+                PlaylistEntity(
+                    Constants.PLAYLIST_ID_FAVORITE,
+                    "Favourites"
+                )
+            )
+            currentSong.value.data?.let {
+                roomRepository.insertSongToPlaylist(
+                    Constants.PLAYLIST_ID_FAVORITE,
+                    it.id
+                )
+            }
+
+        }
     }
 
 }

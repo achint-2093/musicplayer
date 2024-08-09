@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,9 +10,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/rating_bar_color"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         tools:context=".ui.bottomsheets.PlaylistOptionSheet">
 
         <View
@@ -22,14 +25,67 @@
             android:background="@drawable/round_corners_shape"
             android:backgroundTint="@color/icon_color" />
 
-        <TextView
-            android:id="@+id/displayName"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_head"
-            android:textStyle="bold"
-            tools:text="Pdf name" />
+            android:padding="12dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/playlist_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/box_background"
+                android:src="@drawable/music_icon"
+                app:contentPadding="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/roundedImageView" />
+
+            <!--        <com.airbnb.lottie.LottieAnimationView-->
+            <!--            android:id="@+id/animationView"-->
+            <!--            android:layout_width="48dp"-->
+            <!--            android:layout_height="48dp"-->
+            <!--            android:background="@color/box_background"-->
+            <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--            app:layout_constraintStart_toStartOf="parent"-->
+            <!--            app:layout_constraintTop_toTopOf="parent"-->
+            <!--            app:lottie_autoPlay="true"-->
+            <!--            app:lottie_loop="true"-->
+            <!--            app:lottie_rawRes="@raw/play_animation" />-->
+
+
+            <TextView
+                android:id="@+id/playlist_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:maxLines="1"
+                android:textColor="@color/text_color"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/songs_count"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/playlist_image"
+                app:layout_constraintTop_toTopOf="@+id/playlist_image"
+                tools:text="Playlist name" />
+
+            <TextView
+                android:id="@+id/songs_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/text_color_light"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/playlist_image"
+                app:layout_constraintEnd_toEndOf="@+id/playlist_name"
+                app:layout_constraintStart_toStartOf="@+id/playlist_name"
+                app:layout_constraintTop_toBottomOf="@+id/playlist_name"
+                tools:text="songs 7" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <include

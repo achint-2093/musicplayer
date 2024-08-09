@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.jetbrains.kotlin.kapt)
     alias(libs.plugins.navigation.safeargs)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -91,7 +92,6 @@ dependencies {
 
     //lottie
     implementation (libs.lottie)
-
 
 }
 kapt {

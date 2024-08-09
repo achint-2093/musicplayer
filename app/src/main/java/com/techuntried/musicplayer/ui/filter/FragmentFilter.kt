@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentFilterBinding
+import com.techuntried.musicplayer.ui.player.PlayerViewmodel
 import com.techuntried.musicplayer.ui.songs.SongsAdapter
 import com.techuntried.musicplayer.ui.songs.SongsClickListener
 import com.techuntried.musicplayer.utils.Constants
@@ -30,6 +32,7 @@ class FragmentFilter : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: FilterViewModel by viewModels()
     private lateinit var adapter: SongsAdapter
+    private val playerViewModel: PlayerViewmodel by activityViewModels()
     private val args by navArgs<FragmentFilterArgs>()
 
     override fun onCreateView(
@@ -56,15 +59,21 @@ class FragmentFilter : Fragment() {
     private fun setFilterAdapter() {
         adapter = SongsAdapter(object : SongsClickListener {
             override fun onClick(songEntity: SongEntity) {
+
                 val filter = args.filter
                 val playlistId =
                     if (filter == FilterType.Album) Constants.PLAYLIST_ID_ALBUM else Constants.PLAYLIST_ID_ARTIST
-                val action = FragmentFilterDirections.actionFragmentFilterToFragmentPlayer(
+                playerViewModel.fetchSongs(
                     songId = songEntity.id,
                     playlistId = playlistId,
                     filterData = args.filterData
                 )
-                findNavController().navigate(action)
+//                val action = FragmentFilterDirections.actionFragmentFilterToFragmentPlayer(
+//                    songId = songEntity.id,
+//                    playlistId = playlistId,
+//                    filterData = args.filterData
+//                )
+//                findNavController().navigate(action)
             }
 
             override fun onMoreClick(songEntity: SongEntity) {
@@ -83,15 +92,15 @@ class FragmentFilter : Fragment() {
                     when (filteredSongs) {
                         is Response.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            val data = filteredSongs.data ?: emptyList()
-                            if (data.isNotEmpty()) {
+                            val data = filteredSongs.data
+
+                            data?.let {
                                 binding.filterRecyclerView.visibility = View.VISIBLE
                                 adapter.submitList(data)
 
-                            } else {
-                                binding.progressBar.visibility = View.GONE
-                            }
+                            } ?: run {
 
+                            }
                         }
 
                         is Response.Error -> {

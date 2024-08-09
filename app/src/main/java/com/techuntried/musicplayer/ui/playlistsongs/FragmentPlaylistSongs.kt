@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentPlaylistSongsBinding
 import com.techuntried.musicplayer.ui.bottomsheets.SongOptionsSheet
+import com.techuntried.musicplayer.ui.player.PlayerViewmodel
 import com.techuntried.musicplayer.ui.songs.SongsAdapter
 import com.techuntried.musicplayer.ui.songs.SongsClickListener
 import com.techuntried.musicplayer.utils.Response
@@ -33,6 +35,7 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
     private val args: FragmentPlaylistSongsArgs by navArgs()
     private lateinit var adapter: SongsAdapter
     private val viewModel: PlaylistSongViewModel by viewModels()
+    private val playerViewModel: PlayerViewmodel by activityViewModels()
     private lateinit var selectedSong: SongEntity
     private lateinit var songSheetCallback: SongOptionsSheet.BottomSheetCallback
 
@@ -124,17 +127,18 @@ class FragmentPlaylistSongs : Fragment(), SongOptionsSheet.BottomSheetCallback {
     private fun setSongsAdapter() {
         adapter = SongsAdapter(object : SongsClickListener {
             override fun onClick(songEntity: SongEntity) {
-                val action =
-                    FragmentPlaylistSongsDirections.actionFragmentPlaylistSongsToFragmentPlayer(
-                        songEntity.id, args.playlistId,""
-                    )
-                findNavController().navigate(action)
+                playerViewModel.fetchSongs(songEntity.id, args.playlistId, "")
+//                val action =
+//                    FragmentPlaylistSongsDirections.actionFragmentPlaylistSongsToFragmentPlayer(
+//                        songEntity.id, args.playlistId,""
+//                    )
+//                findNavController().navigate(action)
             }
 
             override fun onMoreClick(songEntity: SongEntity) {
                 selectedSong = songEntity
                 val songsBottomSheet =
-                    SongOptionsSheet.newInstance(songEntity.songName, playlistId = args.playlistId)
+                    SongOptionsSheet.newInstance(songEntity, playlistId = args.playlistId)
                 songsBottomSheet.setBottomSheetCallback(songSheetCallback)
                 songsBottomSheet.show(parentFragmentManager, "songsBottomSheet")
             }

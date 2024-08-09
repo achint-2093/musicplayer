@@ -9,22 +9,25 @@
             name="song"
             type="com.techuntried.musicplayer.data.models.SongPickerModel" />
 
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="12dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/musicImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:padding="4dp"
+            android:background="@color/box_background"
+            app:contentPadding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/roundedImageView"
+            app:songCover="@{song.albumId}"
+            tools:src="@drawable/music_icon" />
 
         <TextView
             android:id="@+id/musicName"
@@ -33,10 +36,10 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:maxLines="1"
+            android:text="@{song.name}"
             android:textColor="@color/text_color"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="@{song.name}"
             app:layout_constraintBottom_toTopOf="@+id/musicArtistName"
             app:layout_constraintEnd_toStartOf="@+id/addButton"
             app:layout_constraintStart_toEndOf="@id/musicImage"
@@ -48,9 +51,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:text="@{song.artistName}"
             android:textColor="@color/text_color_light"
             android:textSize="14sp"
-            android:text="@{song.artistName}"
             app:layout_constraintBottom_toBottomOf="@+id/musicImage"
             app:layout_constraintEnd_toEndOf="@+id/musicName"
             app:layout_constraintStart_toStartOf="@+id/musicName"
@@ -62,13 +65,12 @@
             android:id="@+id/addButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_margin="8dp"
             android:padding="8dp"
-            tools:src="@drawable/add_icon"
             app:isInPlaylistIcon="@{song.inPlaylist}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/add_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

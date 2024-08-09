@@ -8,24 +8,26 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.OptionUi
+import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.SongOptionSheetBinding
 import com.techuntried.musicplayer.utils.Constants
 import com.techuntried.musicplayer.utils.SongOptions
+import com.techuntried.musicplayer.utils.setSongCover
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SongOptionsSheet : BottomSheetDialogFragment() {
 
     companion object {
-        private const val ARG_SONG_NAME = "song_name"
+        private const val ARG_SONG = "_song"
         private const val ARG_PLAYLIST_ID = "playlist_id"
 
         fun newInstance(
-            songName: String,
+            song: SongEntity,
             playlistId: Long
         ): SongOptionsSheet {
             val args = Bundle().apply {
-                putString(ARG_SONG_NAME, songName)
+                putParcelable(ARG_SONG, song)
                 putLong(ARG_PLAYLIST_ID, playlistId)
             }
             return SongOptionsSheet().apply {
@@ -47,10 +49,6 @@ class SongOptionsSheet : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         _binding = SongOptionSheetBinding.inflate(inflater, container, false)
 
-//        song = arguments?.getParcelable(ARG_SONG)
-//        binding.displayName.text = song?.songName
-
-
         return binding.root
     }
 
@@ -61,9 +59,11 @@ class SongOptionsSheet : BottomSheetDialogFragment() {
     }
 
     private fun setUi() {
-        val songName = arguments?.getString(ARG_SONG_NAME)
+        val song = arguments?.getParcelable(ARG_SONG) as? SongEntity
         val playlistId = arguments?.getLong(ARG_PLAYLIST_ID)
-        binding.displayName.text = songName
+        binding.musicName.text = song?.songName
+        setSongCover(binding.musicImage, song?.albumId)
+        binding.musicArtistName.text = song?.artist
         if (playlistId == Constants.PLAYLIST_ID_ALL) {
             binding.shareSong.songOption = OptionUi("Share song", R.drawable.share_icon)
             binding.deleteSong.songOption = OptionUi("Delete song", R.drawable.delete_icon)
