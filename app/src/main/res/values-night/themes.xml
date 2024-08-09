@@ -66,4 +66,11 @@
         <item name="closeIcon">@null</item>
     </style>
     <!-- search view style -->
+
+    <!--round image view-->
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+    <!--round image view-->
 </resources>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -61,7 +62,9 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     }
 
     private fun setOnClickListener() {
-
+        binding.songsNumberLayout.setOnClickListener {
+            viewModel.refreshSongs()
+        }
     }
 
     private fun setObservers() {
@@ -72,13 +75,14 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
                     when (songs) {
                         is Response.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            val data = songs.data ?: emptyList()
-                            if (data.isNotEmpty()) {
+                            val data = songs.data
+                            data?.let {
                                 binding.songsRecyclerView.visibility = View.VISIBLE
+                                binding.songsText.text = "Songs ${data.size}"
                                 adapter.submitList(data)
 
-                            } else {
-                                binding.songsRecyclerView.visibility = View.GONE
+                            } ?: kotlin.run {
+                                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
                             }
 
                         }
@@ -106,7 +110,9 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
                 //   Toast.makeText(context, songEntity.album, Toast.LENGTH_SHORT).show()
                 val action =
                     FragmentHomeDirections.actionFragmentHomeToFragmentPlayer(
-                        songId = songEntity.id, playlistId = Constants.PLAYLIST_ID_ALL, filterData = ""
+                        songId = songEntity.id,
+                        playlistId = Constants.PLAYLIST_ID_ALL,
+                        filterData = ""
                     )
                 view?.findNavController()?.navigate(action)
             }

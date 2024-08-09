@@ -3,6 +3,7 @@ package com.techuntried.musicplayer.data.repository
 import com.techuntried.musicplayer.data.database.PlaylistSongsDao
 import com.techuntried.musicplayer.data.database.PlaylistsDao
 import com.techuntried.musicplayer.data.database.SongsDao
+import com.techuntried.musicplayer.data.models.AlbumModel
 import com.techuntried.musicplayer.data.models.PlaylistEntity
 import com.techuntried.musicplayer.data.models.PlaylistSongsRef
 import com.techuntried.musicplayer.data.models.SongEntity
@@ -20,7 +21,7 @@ class RoomRepository @Inject constructor(
     private val playlistSongsDao: PlaylistSongsDao
 ) {
 
-    fun getAlbums(): Flow<List<String>> {
+    fun getAlbums(): Flow<List<AlbumModel>> {
         return songsDao.getAlbums().flowOn(Dispatchers.IO)
     }
 

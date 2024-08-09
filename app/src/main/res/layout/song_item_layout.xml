@@ -13,17 +13,20 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="12dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/musicImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:padding="4dp"
+            android:background="@color/box_background"
+            android:src="@drawable/music_icon"
+            app:contentPadding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/roundedImageView" />
 
         <TextView
             android:id="@+id/musicName"
@@ -47,20 +50,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:text="@{song.artist}"
             android:textColor="@color/text_color_light"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/musicImage"
             app:layout_constraintEnd_toEndOf="@+id/musicName"
             app:layout_constraintStart_toStartOf="@+id/musicName"
             app:layout_constraintTop_toBottomOf="@+id/musicName"
-            android:text="artist"
             tools:text="Artist" />
 
         <ImageView
             android:id="@+id/moreButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_margin="8dp"
             android:padding="10dp"
             android:src="@drawable/more_icon"
             app:layout_constraintBottom_toBottomOf="parent"

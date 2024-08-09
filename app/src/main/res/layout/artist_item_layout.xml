@@ -14,17 +14,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
-        android:padding="8dp">
+        android:padding="12dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/album_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:padding="6dp"
-            android:src="@drawable/close_icon"
+            android:background="@color/box_background"
+            android:src="@drawable/artist_icon"
+            app:contentPadding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/roundedImageView" />
 
         <TextView
             android:id="@+id/aritist_name"

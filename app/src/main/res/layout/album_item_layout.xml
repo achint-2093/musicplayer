@@ -16,30 +16,42 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/album_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="6dp"
-            android:src="@drawable/close_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="172dp"
+            android:background="@color/box_background"
+            app:albumCover="@{album.albumId}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/roundedImageView"
+            tools:src="@drawable/album_icon" />
 
         <TextView
             android:id="@+id/album_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:maxLines="1"
-            android:text="@{album.albumName}"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/text_title"
+            android:textSize="@dimen/text_subtitle"
+            app:albumName="@{album.album}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/album_icon"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/more_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/album_icon"
             tools:text="Album" />
+
+        <ImageView
+            android:id="@+id/more_icon"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:padding="4dp"
+            android:src="@drawable/more_icon"
+            app:layout_constraintBottom_toBottomOf="@id/album_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/album_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

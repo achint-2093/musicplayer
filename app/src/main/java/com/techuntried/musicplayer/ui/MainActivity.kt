@@ -2,6 +2,7 @@ package com.techuntried.musicplayer.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -59,7 +60,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    binding.miniPlayback.visibility = View.VISIBLE
+                    //pending
+                    if (viewModel.currentSong.value.data != null)
+                        binding.miniPlayback.visibility = View.VISIBLE
                 }
             }
 
@@ -73,7 +76,10 @@ class MainActivity : AppCompatActivity() {
                     when (song) {
                         is Response.Success -> {
                             val data = song.data
+
                             data?.let {
+                                Toast.makeText(this@MainActivity, data.songName, Toast.LENGTH_SHORT)
+                                    .show()
                                 val currentDestination = navController.currentDestination
                                 if (currentDestination?.id != R.id.fragmentPlayer) {
                                     binding.miniPlayback.visibility = View.VISIBLE
@@ -83,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                                 binding.musicName.text = data.songName
                                 binding.artistName.text = data.artist
                             } ?: run {
-                                showSnackBar(binding.root, "Error loading content")
+                                binding.miniPlayback.visibility = View.GONE
                             }
 
                         }

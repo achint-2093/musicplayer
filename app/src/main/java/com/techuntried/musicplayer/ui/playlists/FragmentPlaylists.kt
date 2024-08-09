@@ -56,10 +56,14 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUi()
         setPlaylistAdapter()
-        setClickListeners()
         observers()
         setOnClickListeners()
+    }
+
+    private fun setUi() {
+
     }
 
     private fun setOnClickListeners() {
@@ -96,12 +100,13 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
                     when (playlists) {
                         is Response.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            val data = playlists.data ?: emptyList()
-                            if (data.isNotEmpty()) {
+                            val data = playlists.data
+                            data?.let {
                                 binding.emptyLayout.visibility = View.GONE
                                 binding.playListRecyclerView.visibility = View.VISIBLE
+                                binding.playlistText.text = "Playlists ${data.size}"
                                 adapter.submitList(data)
-                            } else {
+                            } ?: kotlin.run {
                                 binding.playListRecyclerView.visibility = View.GONE
                                 binding.emptyLayout.visibility = View.VISIBLE
                             }
@@ -174,9 +179,6 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
 
     }
 
-    private fun setClickListeners() {
-
-    }
 
     private fun showDeleteDialog(playlist: PlaylistEntity) {
         val title = getString(R.string.delete_title)

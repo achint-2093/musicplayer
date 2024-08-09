@@ -10,7 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.techuntried.musicplayer.data.models.AlbumModel
 import com.techuntried.musicplayer.databinding.FragmentAlbumBinding
 import com.techuntried.musicplayer.ui.artist.AlbumViewmodel
@@ -50,14 +50,14 @@ class FragmentAlbum : Fragment() {
             override fun onClick(album: AlbumModel) {
                 val action =
                     FragmentHomeDirections.actionFragmentHomeToFragmentFilter(
-                        FilterType.Album, album.albumName
+                        FilterType.Album, album.album
                     )
                 findNavController().navigate(action)
             }
 
         })
         binding.albumsRecyclerView.adapter = adapter
-        binding.albumsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.albumsRecyclerView.layoutManager = GridLayoutManager(context, 2)
 
     }
 

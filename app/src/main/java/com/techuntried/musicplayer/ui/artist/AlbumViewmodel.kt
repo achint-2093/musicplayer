@@ -3,7 +3,6 @@ package com.techuntried.musicplayer.ui.artist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techuntried.musicplayer.data.models.AlbumModel
-import com.techuntried.musicplayer.data.models.ArtistModel
 import com.techuntried.musicplayer.data.repository.RoomRepository
 import com.techuntried.musicplayer.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,10 +30,7 @@ class AlbumViewmodel @Inject constructor(
         viewModelScope.launch {
             try {
                 roomRepository.getAlbums().collect {
-                    val albums = it.map { albumName ->
-                        AlbumModel(0, albumName)
-                    }
-                    _albums.value = Response.Success(albums)
+                    _albums.value = Response.Success(it)
                 }
             } catch (e: Exception) {
                 _albums.value = Response.Error(e.message ?: "An error occurred")

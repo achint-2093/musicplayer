@@ -13,6 +13,8 @@ data class SongEntity(
     val songName: String,
     @ColumnInfo("artist")
     val artist: String,
+    @ColumnInfo("albumId")
+    val albumId:Long,
     @ColumnInfo("album")
     val album:String,
     @ColumnInfo("uri")

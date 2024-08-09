@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.techuntried.musicplayer.data.models.AlbumModel
 import com.techuntried.musicplayer.data.models.PlaylistEntity
 import com.techuntried.musicplayer.data.models.PlaylistSongsRef
 import com.techuntried.musicplayer.data.models.SongEntity
@@ -48,8 +49,8 @@ interface SongsDao {
     @Query("SELECT DISTINCT artist FROM songs")
     fun getArtists(): Flow<List<String>>
 
-    @Query("SELECT DISTINCT album FROM songs")
-    fun getAlbums(): Flow<List<String>>
+    @Query("SELECT DISTINCT albumId,album FROM songs")
+    fun getAlbums(): Flow<List<AlbumModel>>
 
 }
 

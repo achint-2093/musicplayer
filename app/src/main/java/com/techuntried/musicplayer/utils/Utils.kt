@@ -1,6 +1,8 @@
 package com.techuntried.musicplayer.utils
 
+import android.content.ContentUris
 import android.content.Context
+import android.net.Uri
 import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
@@ -45,4 +47,11 @@ fun Long.formatDuration(): String {
     val minutes = (durationMillis % 3600000) / 60000
     val seconds = (durationMillis % 60000) / 1000
     return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+}
+
+fun getAlbumArtUri(albumId: Long): Uri {
+    return ContentUris.withAppendedId(
+        Uri.parse("content://media/external/audio/albumart"),
+        albumId
+    )
 }
