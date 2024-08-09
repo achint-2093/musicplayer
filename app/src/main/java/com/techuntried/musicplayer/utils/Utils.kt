@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.DimenRes
 import com.google.android.material.snackbar.Snackbar
 import com.techuntried.musicplayer.R
 
@@ -55,3 +56,4 @@ fun getAlbumArtUri(albumId: Long): Uri {
         albumId
     )
 }
+

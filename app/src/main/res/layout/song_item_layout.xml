@@ -21,12 +21,26 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@color/box_background"
-            android:src="@drawable/music_icon"
+            tools:src="@drawable/music_icon"
+            app:songCover="@{song.albumId}"
             app:contentPadding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/roundedImageView" />
+
+<!--        <com.airbnb.lottie.LottieAnimationView-->
+<!--            android:id="@+id/animationView"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:background="@color/box_background"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:lottie_autoPlay="true"-->
+<!--            app:lottie_loop="true"-->
+<!--            app:lottie_rawRes="@raw/play_animation" />-->
+
 
         <TextView
             android:id="@+id/musicName"

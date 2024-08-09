@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentSongsBinding
 import com.techuntried.musicplayer.ui.bottomsheets.SongOptionsSheet
-import com.techuntried.musicplayer.ui.home.FragmentHomeDirections
+import com.techuntried.musicplayer.ui.player.PlayerViewmodel
 import com.techuntried.musicplayer.utils.Constants
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.SongOptions
@@ -30,6 +30,8 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     private val binding get() = _binding!!
 
     private val viewModel: SongViewModel by viewModels()
+    private val playerViewModel: PlayerViewmodel by activityViewModels()
+
     private lateinit var adapter: SongsAdapter
     private lateinit var selectedSong: SongEntity
     private lateinit var songSheetCallback: SongOptionsSheet.BottomSheetCallback
@@ -108,13 +110,18 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
 
             override fun onClick(songEntity: SongEntity) {
                 //   Toast.makeText(context, songEntity.album, Toast.LENGTH_SHORT).show()
-                val action =
-                    FragmentHomeDirections.actionFragmentHomeToFragmentPlayer(
-                        songId = songEntity.id,
-                        playlistId = Constants.PLAYLIST_ID_ALL,
-                        filterData = ""
-                    )
-                view?.findNavController()?.navigate(action)
+                playerViewModel.fetchSongs(
+                    songId = songEntity.id,
+                    playlistId = Constants.PLAYLIST_ID_ALL,
+                    filterData = ""
+                )
+//                val action =
+//                    FragmentHomeDirections.actionFragmentHomeToFragmentPlayer(
+//                        songId = songEntity.id,
+//                        playlistId = Constants.PLAYLIST_ID_ALL,
+//                        filterData = ""
+//                    )
+//                view?.findNavController()?.navigate(action)
             }
 
             override fun onMoreClick(songEntity: SongEntity) {

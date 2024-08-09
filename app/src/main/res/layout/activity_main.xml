@@ -33,8 +33,7 @@
             android:id="@+id/mini_playback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/round_corners_shape"
+            android:background="@drawable/miniplayback_rounded_shape"
             android:backgroundTint="#FFEB3B"
             android:elevation="4dp"
             android:padding="8dp"
@@ -42,15 +41,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/musicImageView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/box_background"
                 android:importantForAccessibility="no"
-                android:src="@drawable/favourite_icon"
+                android:src="@drawable/music_icon"
+                app:contentPadding="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/roundedImageView" />
 
             <TextView
                 android:id="@+id/music_name"
@@ -85,8 +88,9 @@
                 android:id="@+id/play_pause_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/play_icon"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/play_button_cd"
+                android:src="@drawable/play_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

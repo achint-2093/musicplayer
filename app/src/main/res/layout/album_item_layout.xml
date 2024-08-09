@@ -22,6 +22,7 @@
             android:layout_height="172dp"
             android:background="@color/box_background"
             app:albumCover="@{album.albumId}"
+            app:contentPadding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

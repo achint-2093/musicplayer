@@ -68,13 +68,13 @@ class FragmentAlbum : Fragment() {
                     when (artists) {
                         is Response.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            val data = artists.data ?: emptyList()
-                            if (data.isNotEmpty()) {
+                            val data = artists.data
+                            data?.let {
                                 binding.albumsRecyclerView.visibility = View.VISIBLE
+                                binding.albumText.text = "${it.size} Albums"
                                 adapter.submitList(data)
+                            } ?: run {
 
-                            } else {
-                                binding.progressBar.visibility = View.GONE
                             }
 
                         }

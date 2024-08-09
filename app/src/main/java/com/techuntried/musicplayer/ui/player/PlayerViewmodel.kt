@@ -74,6 +74,8 @@ class PlayerViewmodel @Inject constructor(
             val lastFilterData = dataStoreRepository.getCurrentFilterData()
             if (lastPlaylistId != null && lastSongId != null && lastFilterData != null) {
                 fetchSongs(lastSongId, lastPlaylistId, lastFilterData)
+            } else {
+                _currentSong.value = Response.Success(null)
             }
             listeners()
             setUi()

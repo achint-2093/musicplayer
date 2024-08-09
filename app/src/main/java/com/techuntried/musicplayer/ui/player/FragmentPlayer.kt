@@ -27,7 +27,7 @@ class FragmentPlayer : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private val viewModel: PlayerViewmodel by activityViewModels()
-    private val args by navArgs<FragmentPlayerArgs>()
+    //private val args by navArgs<FragmentPlayerArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +41,7 @@ class FragmentPlayer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchSongs(args.songId,args.playlistId,args.filterData)
+       // viewModel.fetchSongs(args.songId,args.playlistId,args.filterData)
         observers()
         clickListeners()
     }

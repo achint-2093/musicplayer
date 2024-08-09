@@ -104,7 +104,7 @@ class FragmentPlaylists : Fragment(), AddPlaylistSheet.BottomSheetCallback,
                             data?.let {
                                 binding.emptyLayout.visibility = View.GONE
                                 binding.playListRecyclerView.visibility = View.VISIBLE
-                                binding.playlistText.text = "Playlists ${data.size}"
+                                binding.playlistsText.text = "Playlists ${data.size}"
                                 adapter.submitList(data)
                             } ?: kotlin.run {
                                 binding.playListRecyclerView.visibility = View.GONE

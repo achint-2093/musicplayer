@@ -2,7 +2,6 @@ package com.techuntried.musicplayer.ui
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +18,7 @@ import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.databinding.ActivityMainBinding
 import com.techuntried.musicplayer.ui.player.PlayerViewmodel
 import com.techuntried.musicplayer.utils.Response
+import com.techuntried.musicplayer.utils.setSongCover
 import com.techuntried.musicplayer.utils.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    //pending
                     if (viewModel.currentSong.value.data != null)
                         binding.miniPlayback.visibility = View.VISIBLE
                 }
@@ -78,11 +77,10 @@ class MainActivity : AppCompatActivity() {
                             val data = song.data
 
                             data?.let {
-                                Toast.makeText(this@MainActivity, data.songName, Toast.LENGTH_SHORT)
-                                    .show()
                                 val currentDestination = navController.currentDestination
                                 if (currentDestination?.id != R.id.fragmentPlayer) {
                                     binding.miniPlayback.visibility = View.VISIBLE
+                                    setSongCover(binding.musicImageView,it.albumId)
                                 } else {
                                     binding.miniPlayback.visibility = View.GONE
                                 }
@@ -95,10 +93,12 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         is Response.Error -> {
+                            binding.miniPlayback.visibility = View.GONE
                             showSnackBar(binding.root, song.errorMessage.toString())
                         }
 
                         is Response.Loading -> {
+                            binding.miniPlayback.visibility = View.GONE
                             //binding.playerLayout.visibility = View.GONE
                         }
                     }
@@ -122,6 +122,9 @@ class MainActivity : AppCompatActivity() {
     private fun setOnClickListeners() {
         binding.playPauseButton.setOnClickListener {
             viewModel.handlePlayPauseButton()
+        }
+        binding.miniPlayback.setOnClickListener {
+            navController.navigate(R.id.fragmentPlayer)
         }
     }
 }

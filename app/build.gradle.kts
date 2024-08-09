@@ -89,6 +89,9 @@ dependencies {
     //glide
     implementation(libs.glide)
 
+    //lottie
+    implementation (libs.lottie)
+
 
 }
 kapt {
