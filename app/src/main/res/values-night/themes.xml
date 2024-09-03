@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.MusicPlayer" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
@@ -9,7 +9,9 @@
         <item name="searchViewStyle">@style/mySearchView</item>
         <item name="autoCompleteTextViewStyle">@style/searchView_auto_text_style</item>
         <item name="colorControlActivated">@color/button_color</item>
+        <item name="android:textColor">@color/text_color</item><!--popup menu text color -->
     </style>
+
     <style name="RoundedCornerAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/round_corners_shape</item>
     </style>
@@ -78,4 +80,9 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
+
+    <style name="CustomPopupMenu" parent="Widget.AppCompat.PopupWindow">
+        <item name="android:popupBackground">@drawable/popup_round_bg</item>
+    </style>
+
 </resources>

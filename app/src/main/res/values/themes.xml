@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.MusicPlayer" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -25,7 +25,7 @@
 
 
     <style name="BoldTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-<!--        <item name="fontFamily">@font/rubik_medium</item>-->
+        <!--        <item name="fontFamily">@font/rubik_medium</item>-->
         <item name="android:textSize">@dimen/text_title</item>
     </style>
     <!-- toolbar style -->
@@ -33,7 +33,7 @@
     <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:layout_height">@dimen/button_height</item>
         <item name="android:textSize">@dimen/button_text</item>
-<!--        <item name="android:fontFamily">@font/rubik_medium</item>-->
+        <!--        <item name="android:fontFamily">@font/rubik_medium</item>-->
         <item name="android:background">@drawable/round_corners_shape</item>
         <item name="android:backgroundTint">@color/button_color</item>
         <item name="android:textAllCaps">false</item>
@@ -81,4 +81,7 @@
         <item name="cornerSize">16dp</item>
     </style>
     <!--round image view-->
+    <style name="CustomPopupMenu" parent="Widget.AppCompat.PopupWindow">
+        <item name="android:popupBackground">@drawable/popup_round_bg</item>
+    </style>
 </resources>

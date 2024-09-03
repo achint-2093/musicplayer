@@ -54,11 +54,13 @@
                             tools:text="5 Songs" />
 
                         <ImageView
-                            android:id="@+id/refresh_button"
+                            android:id="@+id/more_button"
                             android:layout_width="36dp"
                             android:layout_height="36dp"
                             android:layout_alignParentEnd="true"
-                            android:src="@drawable/refresh_icon" />
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="4dp"
+                            android:src="@drawable/more_icon" />
 
 
                     </RelativeLayout>

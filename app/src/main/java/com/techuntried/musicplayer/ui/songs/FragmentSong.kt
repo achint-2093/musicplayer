@@ -1,9 +1,13 @@
 package com.techuntried.musicplayer.ui.songs
 
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.LayoutInflater
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -13,9 +17,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.techuntried.musicplayer.R
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentSongsBinding
-import com.techuntried.musicplayer.ui.bottomsheets.PermissionBottomSheet
 import com.techuntried.musicplayer.ui.bottomsheets.SongOptionsSheet
 import com.techuntried.musicplayer.ui.player.PlayerViewmodel
 import com.techuntried.musicplayer.utils.Constants
@@ -65,8 +69,8 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
 
 
     private fun setOnClickListener() {
-        binding.songsNumberLayout.setOnClickListener {
-            viewModel.refreshSongs()
+        binding.moreButton.setOnClickListener {
+            showMenu(it)
         }
         binding.permissionRequire.setOnClickListener {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
@@ -135,6 +139,15 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
         }
     }
 
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        requireActivity().menuInflater.inflate(R.menu.songs_menu, menu)
+    }
+
     private fun setSongsAdapter() {
         adapter = SongsAdapter(object : SongsClickListener {
 
@@ -163,6 +176,26 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun showMenu(v: View) {
+        val popup = PopupMenu(context, v, 0,0, R.style.CustomPopupMenu)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.songs_menu, popup.menu)
+        popup.setOnMenuItemClickListener { menu ->
+            when (menu.itemId) {
+                R.id.refresh_songs_action -> {
+                    viewModel.refreshSongs()
+                    true
+                }
+
+                else -> {
+                    true
+                }
+            }
+
+        }
+        popup.show()
     }
 
     override fun onSongOptionSheetDismissed(selectedOption: SongOptions?) {
