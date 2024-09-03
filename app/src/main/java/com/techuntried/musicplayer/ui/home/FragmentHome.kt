@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
@@ -15,19 +16,6 @@ class FragmentHome : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var tabAdapter: TabAdapter
-
-    private val permissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-//            if (isGranted) {
-//                viewModel.fetchImages()
-//            } else if (requireActivity().requestRationale(readImagePermissionAbove10)) {
-//                showPermissionSheet(false)
-//            } else {
-//                showPermissionSheet(true)
-//            }
-        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,10 +29,9 @@ class FragmentHome : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        permissionLauncher.launch(android.Manifest.permission.READ_MEDIA_AUDIO)
-
         setTabAdapter()
     }
+
 
     private fun setTabAdapter() {
         tabAdapter = TabAdapter(childFragmentManager,lifecycle)

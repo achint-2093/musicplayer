@@ -3,9 +3,7 @@ package com.techuntried.musicplayer.ui.artist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techuntried.musicplayer.data.models.ArtistModel
-import com.techuntried.musicplayer.data.repository.DataStoreRepository
 import com.techuntried.musicplayer.data.repository.RoomRepository
-import com.techuntried.musicplayer.data.repository.SongsRepository
 import com.techuntried.musicplayer.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,19 +17,15 @@ class ArtistViewmodel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _artists = MutableStateFlow<Response<List<ArtistModel>>>(Response.Loading())
-    val artists: StateFlow<Response<List<ArtistModel>>>
+    private val _artists = MutableStateFlow<Response<List<ArtistModel>>?>(null)
+    val artists: StateFlow<Response<List<ArtistModel>>?>
         get() = _artists
 
 
-    init {
-        fetchArtists()
-    }
-
-
-    private fun fetchArtists() {
+    fun fetchArtists() {
         viewModelScope.launch {
             try {
+                _artists.value=Response.Loading()
                 roomRepository.getArtists().collect {
                     val artists = it.map { artistName ->
                         ArtistModel(0, artistName)

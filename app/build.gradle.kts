@@ -93,6 +93,8 @@ dependencies {
     //lottie
     implementation (libs.lottie)
 
+    //swipe to refresh
+    implementation(libs.androidx.swiperefreshlayout)
 }
 kapt {
     correctErrorTypes = true

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:background="@color/rating_bar_color"
+        android:background="#00BCD4"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         tools:context=".ui.bottomsheets.SongOptionsSheet">

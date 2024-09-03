@@ -55,10 +55,24 @@
 
         </androidx.core.widget.NestedScrollView>
 
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/permission_require"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Permission Required"
+            android:textColor="@color/text_color"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:indeterminateTint="@color/button_color"
             android:progressTint="@color/button_color"
             app:layout_constraintBottom_toBottomOf="parent"

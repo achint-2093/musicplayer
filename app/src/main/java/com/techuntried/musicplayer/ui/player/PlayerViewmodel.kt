@@ -43,6 +43,14 @@ class PlayerViewmodel @Inject constructor(
     val currentSong: StateFlow<Response<SongEntity>>
         get() = _currentSong
 
+    private val _isPermissionGranted = MutableStateFlow<Boolean>(false)
+    val isPermissionGranted: StateFlow<Boolean>
+        get() = _isPermissionGranted
+
+    private val _isDialogShown = MutableStateFlow<Pair<Boolean, Boolean>>(Pair(false, false))
+    val isDialogShown: StateFlow<Pair<Boolean, Boolean>>
+        get() = _isDialogShown
+
     private val currentSongIndex = MutableStateFlow(0)
 
     private val _playlist = MutableStateFlow<List<SongEntity>>(emptyList())
@@ -64,6 +72,13 @@ class PlayerViewmodel @Inject constructor(
     private var mediaController: MediaController? = null
     private val handler = Handler(Looper.getMainLooper())
 
+    fun updatePermissionStatus(status: Boolean) {
+        _isPermissionGranted.value = status
+    }
+
+    fun updateDialogShown(isDialogShown: Boolean, isSettingStyle: Boolean) {
+        _isDialogShown.value = Pair(isDialogShown, isSettingStyle)
+    }
 
     init {
         viewModelScope.launch {

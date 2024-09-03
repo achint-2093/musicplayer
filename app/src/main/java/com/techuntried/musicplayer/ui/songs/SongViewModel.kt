@@ -21,17 +21,15 @@ class SongViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _songs = MutableStateFlow<Response<List<SongEntity>>>(Response.Loading())
-    val songs: StateFlow<Response<List<SongEntity>>>
+    private val _songs = MutableStateFlow<Response<List<SongEntity>>?>(null)
+    val songs: StateFlow<Response<List<SongEntity>>?>
         get() = _songs
 
-    init {
-        fetchMusicFiles()
-    }
 
     fun refreshSongs() {
         viewModelScope.launch {
             try {
+                _songs.value=Response.Loading()
                 songsRepository.refreshSongs()
             } catch (e: Exception) {
                 _songs.value = Response.Error(e.message.toString())
@@ -39,9 +37,10 @@ class SongViewModel @Inject constructor(
         }
     }
 
-    private fun fetchMusicFiles() {
+    fun fetchMusicFiles() {
         viewModelScope.launch {
             try {
+                _songs.value = Response.Loading()
                 val isFirstTime = dataStoreRepository.isFirstTime() ?: true
                 if (isFirstTime) {
                     songsRepository.updateSongs()

@@ -26,8 +26,8 @@ class SongsRepository @Inject constructor(
 
     suspend fun refreshSongs() {
         val songs = fetchMusicFiles()
-        insertSongs(songs)
         val savedSongs = fetchSongsFromDatabase()
+        insertSongs(songs)
         val findDeletedSongs = findDeletedSongs(songs, savedSongs)
         removeDeletedSongsFromDatabase(findDeletedSongs)
     }
@@ -89,14 +89,14 @@ private suspend fun fetchSongsFromDatabase(): List<SongEntity> {
     }
 }
 
-fun findDeletedSongs(
+private fun findDeletedSongs(
     deviceSongs: List<SongEntity>,
     databaseSongs: List<SongEntity>
 ): List<SongEntity> {
     return databaseSongs.filter { dbSong -> deviceSongs.none { it.uri == dbSong.uri } }
 }
 
-suspend fun removeDeletedSongsFromDatabase(deletedSongs: List<SongEntity>) {
+private suspend fun removeDeletedSongsFromDatabase(deletedSongs: List<SongEntity>) {
     return withContext(Dispatchers.IO) {
         songsDao.deleteSongs(deletedSongs)
     }

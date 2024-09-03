@@ -16,19 +16,15 @@ class AlbumViewmodel @Inject constructor(
     private val roomRepository: RoomRepository,
 ) : ViewModel() {
 
-    private val _albums = MutableStateFlow<Response<List<AlbumModel>>>(Response.Loading())
-    val albums: StateFlow<Response<List<AlbumModel>>>
+    private val _albums = MutableStateFlow<Response<List<AlbumModel>>?>(null)
+    val albums: StateFlow<Response<List<AlbumModel>>?>
         get() = _albums
 
 
-    init {
-        fetchAlbums()
-    }
-
-
-    private fun fetchAlbums() {
+    fun fetchAlbums() {
         viewModelScope.launch {
             try {
+                _albums.value=Response.Loading()
                 roomRepository.getAlbums().collect {
                     _albums.value = Response.Success(it)
                 }

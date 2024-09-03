@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/miniplayback_rounded_shape"
-            android:backgroundTint="#FFEB3B"
+            android:backgroundTint="#03A9F4"
             android:elevation="4dp"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -65,6 +65,7 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/artist_name"
@@ -77,6 +78,7 @@
                 android:id="@+id/artist_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/music_name"
@@ -94,6 +96,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white"
                 tools:src="@drawable/play_icon" />
 
 

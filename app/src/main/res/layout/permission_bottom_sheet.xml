@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".ui.bottomsheets.PermissionBottomSheet">
+
+
+        <View
+            android:id="@+id/lineView"
+            android:layout_width="32dp"
+            android:layout_height="3.5dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/round_corners_shape"
+            android:backgroundTint="@color/icon_color" />
+
+        <TextView
+            android:id="@+id/permissionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Permission Required"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_head"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/permission_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="This app needs audio permission to fetch music files. Please grant the permission"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_normal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/laterButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_corners_shape"
+                android:backgroundTint="#D7D4D4"
+                android:gravity="center"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/button_text"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/grantPermissionButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_corners_shape"
+                android:backgroundTint="@color/button_color"
+                android:gravity="center"
+                android:text="Grant"
+                android:textAllCaps="false"
+                android:textColor="@color/button_text"
+                android:textSize="@dimen/button_text"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

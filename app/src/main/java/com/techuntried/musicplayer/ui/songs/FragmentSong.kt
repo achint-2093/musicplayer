@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -14,14 +15,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.techuntried.musicplayer.data.models.SongEntity
 import com.techuntried.musicplayer.databinding.FragmentSongsBinding
+import com.techuntried.musicplayer.ui.bottomsheets.PermissionBottomSheet
 import com.techuntried.musicplayer.ui.bottomsheets.SongOptionsSheet
 import com.techuntried.musicplayer.ui.player.PlayerViewmodel
 import com.techuntried.musicplayer.utils.Constants
+import com.techuntried.musicplayer.utils.PermissionManager
 import com.techuntried.musicplayer.utils.Response
 import com.techuntried.musicplayer.utils.SongOptions
 import com.techuntried.musicplayer.utils.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
@@ -35,6 +39,7 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     private lateinit var adapter: SongsAdapter
     private lateinit var selectedSong: SongEntity
     private lateinit var songSheetCallback: SongOptionsSheet.BottomSheetCallback
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,52 +58,77 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUi()
         setSongsAdapter()
         setObservers()
         setOnClickListener()
     }
 
-    private fun setUi() {
-
-    }
 
     private fun setOnClickListener() {
         binding.songsNumberLayout.setOnClickListener {
             viewModel.refreshSongs()
         }
+        binding.permissionRequire.setOnClickListener {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    requireActivity(),
+                    PermissionManager.audioPermission
+                )
+            ) {
+                playerViewModel.updateDialogShown(true, false)
+            } else {
+                playerViewModel.updateDialogShown(true, true)
+            }
+        }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refreshSongs()
+        }
     }
 
     private fun setObservers() {
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.songs.collect { songs ->
-                    when (songs) {
-                        is Response.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            val data = songs.data
-                            data?.let {
-                                binding.songsRecyclerView.visibility = View.VISIBLE
-                                binding.songsText.text = "Songs ${data.size}"
-                                adapter.submitList(data)
+                    songs?.let {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        when (songs) {
+                            is Response.Success -> {
+                                binding.progressBar.visibility = View.GONE
+                                val data = songs.data
+                                data?.let {
+                                    binding.songsRecyclerView.visibility = View.VISIBLE
+                                    binding.songsText.text = "Songs ${data.size}"
+                                    adapter.submitList(data)
 
-                            } ?: kotlin.run {
-                                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+                                } ?: kotlin.run {
+                                    Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+                                }
+
                             }
 
-                        }
+                            is Response.Error -> {
+                                binding.progressBar.visibility = View.GONE
+                                binding.songsRecyclerView.visibility = View.GONE
+                                showSnackBar(binding.root, songs.errorMessage.toString())
+                            }
 
-                        is Response.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.songsRecyclerView.visibility = View.GONE
-                            showSnackBar(binding.root, songs.errorMessage.toString())
+                            is Response.Loading -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                                binding.songsRecyclerView.visibility = View.GONE
+                            }
                         }
+                    }
+                }
+            }
+        }
 
-                        is Response.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                            binding.songsRecyclerView.visibility = View.GONE
-                        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                playerViewModel.isPermissionGranted.collect {
+                    if (it) {
+                        binding.permissionRequire.visibility = View.GONE
+                        viewModel.fetchMusicFiles()
+                    } else {
+                        binding.permissionRequire.visibility = View.VISIBLE
                     }
                 }
             }
@@ -109,19 +139,11 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
         adapter = SongsAdapter(object : SongsClickListener {
 
             override fun onClick(songEntity: SongEntity) {
-                //   Toast.makeText(context, songEntity.album, Toast.LENGTH_SHORT).show()
                 playerViewModel.fetchSongs(
                     songId = songEntity.id,
                     playlistId = Constants.PLAYLIST_ID_ALL,
                     filterData = ""
                 )
-//                val action =
-//                    FragmentHomeDirections.actionFragmentHomeToFragmentPlayer(
-//                        songId = songEntity.id,
-//                        playlistId = Constants.PLAYLIST_ID_ALL,
-//                        filterData = ""
-//                    )
-//                view?.findNavController()?.navigate(action)
             }
 
             override fun onMoreClick(songEntity: SongEntity) {
