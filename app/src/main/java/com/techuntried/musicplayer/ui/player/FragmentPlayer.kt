@@ -155,7 +155,7 @@ class FragmentPlayer : Fragment() {
 //        }
 
         binding.favouriteIcon.setOnClickListener {
-            viewModel.addToFavorites()
+
         }
 
         binding.toolbar.setNavigationOnClickListener {

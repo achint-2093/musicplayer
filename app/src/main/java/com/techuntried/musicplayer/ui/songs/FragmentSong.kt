@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -179,7 +178,7 @@ class FragmentSong : Fragment(), SongOptionsSheet.BottomSheetCallback {
     }
 
     private fun showMenu(v: View) {
-        val popup = PopupMenu(context, v, 0,0, R.style.CustomPopupMenu)
+        val popup = PopupMenu(context, v, 0, 0, R.style.CustomPopupMenu)
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.songs_menu, popup.menu)
         popup.setOnMenuItemClickListener { menu ->
